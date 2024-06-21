@@ -1,0 +1,10 @@
+.topCurator {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 450px;
+  img {
+    width: 60px;
+    height: 60px;
+  }
+}

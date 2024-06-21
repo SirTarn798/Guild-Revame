@@ -1,0 +1,21 @@
+.fullReviewContainer {
+  padding: 15px;
+  color: rgb(211, 210, 210);
+  border-bottom: 1px solid;
+  border-color: rgb(211, 210, 210);
+}
+
+.gameTitle,
+.reviewContent {
+  padding-left: 75px;
+}
+
+.reviewContent {
+  padding-top: 13px;
+}
+
+.reviewImage {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+}

@@ -1,0 +1,88 @@
+.mainPageContentContainer {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(46, 45, 45, 0.795);
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.reviewRow {
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+}
+
+.showcaseReview {
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    padding: 50px;
+    color: rgb(211, 210, 210);
+  }
+}
+
+.mainPageReview {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: rgb(211, 210, 210);
+  background-color: rgba(22, 22, 22, 0.671);
+  padding: 20px;
+  width: 300px;
+  height: 250px;
+  overflow: scroll;
+  overflow-x: hidden;
+  border-radius: 5px;
+}
+
+.topGamesContainer {
+  display: flex;
+  flex-direction: column;
+  margin-left: 130px;
+  padding-bottom: 20px;
+  gap: 20px;
+}
+
+.searchGame {
+  padding: 10px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  
+  input {
+    background-color: rgba(68, 68, 68, 0.801);
+    border: none;
+    width: 310px;
+    padding: 10px;
+    border-radius: 15px;
+    color: rgb(211, 210, 210);
+  }
+
+  button {
+    background-color: rgba(63, 111, 216, 0.603);
+    border: none;
+    padding: 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    color: rgb(211, 210, 210);
+  }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgba(214, 213, 213, 0.87);
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(230, 225, 225, 0.479);
+  border-radius: 10px;
+}

@@ -1,0 +1,54 @@
+.navigatorContainer {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    button {
+        width: 190px;
+        padding: 15px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        margin-right: 10px;
+        background-color: rgba(63, 111, 216, 0.603);
+        color: rgb(211, 210, 210);
+        font-size: large;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: rgba(139, 170, 238, 0.527);
+
+    }
+
+}
+
+.navigatorButtons {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    align-items: flex-end;
+
+    img {
+        width: 40px;
+        height: 40px;
+    }
+
+    a {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        padding: 10px;
+        text-decoration: none;
+        width: 200px;
+        p {
+            color: rgb(211, 210, 210);
+        }
+
+    }
+
+
+}

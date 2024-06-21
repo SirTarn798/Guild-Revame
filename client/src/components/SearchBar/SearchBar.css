@@ -1,0 +1,25 @@
+.searchGame {
+    padding: 10px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    
+    input {
+      background-color: rgba(68, 68, 68, 0.801);
+      border: none;
+      width: 310px;
+      padding: 10px;
+      border-radius: 15px;
+      color: rgb(211, 210, 210);
+    }
+  
+    button {
+      background-color: rgba(63, 111, 216, 0.603);
+      border: none;
+      padding: 10px;
+      border-radius: 15px;
+      cursor: pointer;
+      color: rgb(211, 210, 210);
+    }
+  }

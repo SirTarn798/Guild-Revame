@@ -1,0 +1,9 @@
+.followingContainer {
+  display: flex;
+  background-color: rgba(34, 35, 36, 0.253);
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid;
+  border-color: rgba(255, 255, 255, 0.021);
+}

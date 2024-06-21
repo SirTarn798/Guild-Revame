@@ -1,0 +1,13 @@
+.topGame {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    img {
+        width: 100px;
+        height: 60px;
+    }
+
+    p {
+        color: rgb(211, 210, 210);
+    }
+}

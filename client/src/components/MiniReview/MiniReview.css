@@ -1,0 +1,29 @@
+.miniReview {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: rgb(211, 210, 210);
+  background-color: rgba(22, 22, 22, 0.671);
+  padding: 20px;
+  width: 300px;
+  height: 250px;
+  overflow: scroll;
+  overflow-x: hidden;
+  border-radius: 5px;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: rgb(211, 210, 210);
+  img {
+    width: 60px;
+    height: 60px;
+  }
+
+  p {
+    font-weight: bold;
+  }
+
+}

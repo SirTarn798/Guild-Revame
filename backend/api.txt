@@ -1,0 +1,5 @@
+~ means no case sensitive
+* means whatever
+
+example : where name ~ *"lden rin"*;` gives Elden Ring
+
