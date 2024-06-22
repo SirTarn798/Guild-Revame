@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/Main/MainPage";
 import Login from "./pages/Login/Login";
 import Following from "./pages/Follows/Following";
+import SearchGame from "./pages/SearchGame/SearchGame";
 import useUserStore from "../lib/userStore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../lib/firebase";
@@ -31,6 +32,7 @@ function App() {
         <Route index element={<MainPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/following" element={<Following />} />
+        <Route path="/searchgame/:gameName" element={<SearchGame />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,14 +1,19 @@
 import "./SearchBar.css";
+import { useNavigate } from "react-router-dom";
 
-function SearchBar({ searchGame }) {
+function SearchBar() {
+  const navigate = useNavigate()
   const onSearchGame = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const { gameName } = Object.fromEntries(formData);
+    try {
+    navigate(`/searchgame/${gameName}`)
+    } catch(err) {
+      console.log("Please insert game name.")
+    }
 
-    const response = await fetch("http://localhost:3000/searchGame/xdd");
-    const data = await response.json();
-    console.log(data);
+
   };
   return (
     <form className="searchGame" onSubmit={onSearchGame}>

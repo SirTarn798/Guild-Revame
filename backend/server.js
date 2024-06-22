@@ -10,7 +10,6 @@ const port = 3000;
 const url = "https://api.igdb.com/v4/games/";
 const coversUrl = "https://api.igdb.com/v4/covers/";
 
-
 const headers = {
   "Client-ID": "zj32fyz6jbnkptbpl0bwi986nlpfde",
   Authorization: "Bearer " + process.env.VITE_IGDB_BEARER,
@@ -30,7 +29,7 @@ app.use(cors(corsOptions));
 
 app.get("/searchGame/:gameName", async (req, res) => {
   const gameName = req.params.gameName;
-  const getGamesBody = `fields id, name, rating_count, cover; where name ~ *"Elden Ring"* & category = 0;`;
+  const getGamesBody = `fields id, name, rating_count, storyline, cover; where name ~ *"${gameName}"* & category = 0;`;
   try {
     //get game details
     let response = await fetch(url, {
@@ -64,13 +63,21 @@ app.get("/searchGame/:gameName", async (req, res) => {
     const gameCovers = await response.json();
 
     //insert image urls to the gameData and change small to huge image
-    gameData = gameData.map(game => {
-      let matchingObj = gameCovers.find(gameCover => gameCover.id === game.cover);
+    gameData = gameData.map((game) => {
+      let matchingObj = gameCovers.find(
+        (gameCover) => gameCover.id === game.cover
+      );
       if (matchingObj) {
-          return { ...game, url: (matchingObj.url.slice(0,-3) + "webp").replace('/t_thumb/', '/t_cover_big/') };
+        return {
+          ...game,
+          url: (matchingObj.url.slice(0, -3) + "webp").replace(
+            "/t_thumb/",
+            "/t_cover_big/"
+          ),
+        };
       }
       return game;
-  });
+    });
 
     res.json(gameData);
   } catch (err) {

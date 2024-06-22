@@ -1,0 +1,27 @@
+.searchGamePanel {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(46, 45, 45, 0.795);
+  overflow: scroll;
+  overflow-x: hidden;
+  padding: 10px;
+
+    h1 {
+        color: white;
+        padding-left: 7px;
+    }
+
+}
+
+.searchGamePanelLoading {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(46, 45, 45, 0.795);
+    overflow: scroll;
+    overflow-x: hidden;
+    align-items: center;
+    justify-content: center;
+  }
+  

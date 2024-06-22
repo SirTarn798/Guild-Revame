@@ -6,11 +6,9 @@ import { useState } from "react";
 
 function MainPageContent() {
 
-  const [gameFound, setGameFound] = useState("");
-
   return (
     <div className="mainPageContentContainer">
-      <SearchBar searchGame={setGameFound}/>
+      <SearchBar/>
       <div className="showcaseReview">
         <h1>Top Reviews</h1>
         <div className="reviewRow">
