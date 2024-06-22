@@ -4,9 +4,9 @@
   padding: 15px;
   gap: 20px;
   color: rgb(211, 210, 210);
-  overflow: scroll;
-  overflow-x: hidden;
+  
   scrollbar-gutter: stable;
+  height: 100%px;
   .gameDetail {
     display: flex;
     flex-direction: column;
@@ -14,5 +14,7 @@
 
   img {
     border-radius: 10px;
+    width: 264px;
+    height: 352px;
   }
 }

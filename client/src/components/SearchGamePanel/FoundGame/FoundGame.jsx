@@ -3,7 +3,7 @@ import './FoundGame.css'
 function FoundGame(props) {
     return(
         <div className='foundGame'>
-            <img src={props.data.url}/>
+            <img src={props.data.url ? props.data.url : "/nopic.png"}/>
             <div className='gameDetail'>
                 <h2>{props.data.name}</h2>
                 <p>{props.data.storyline}</p>

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 function SearchBar() {
   const navigate = useNavigate()
   const onSearchGame = async (e) => {
-    e.preventDefault();
     const formData = new FormData(e.target);
     const { gameName } = Object.fromEntries(formData);
     try {
