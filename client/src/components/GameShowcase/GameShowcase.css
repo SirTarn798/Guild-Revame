@@ -1,0 +1,21 @@
+.gameShowcaseContainer {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(46, 45, 45, 0.795);
+    overflow: scroll;
+    overflow-x: hidden;
+    align-items: center;
+}
+
+.fullGameDetail {
+    display: flex;
+    gap: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+    img {
+        border-radius: 10px;
+        width: 264px;
+        height: 352px;
+    }
+}
