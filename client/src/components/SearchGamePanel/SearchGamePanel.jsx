@@ -8,7 +8,7 @@ function SearchGamePanel(props) {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     async function retrieveGameData() {
-      const link = "http://localhost:3000/searchGame/" + props.gameName;
+      const link = "http://localhost:3000/searchGameName/" + props.gameName;
       try {
         const response = await fetch(link);
         const data = await response.json();

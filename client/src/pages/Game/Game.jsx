@@ -5,9 +5,11 @@ import TopCurators from '../../components/TopCurators/TopCurators';
 import useUserStore from '../../../lib/userStore';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 function Game() {
-
+    const params = useParams();
+    const gameID = params.gameID;
     const { currentUser } = useUserStore();
     const navigate = useNavigate();
 
@@ -23,7 +25,7 @@ function Game() {
     return (
         <div className='gameContainer'>
             <Navigator />
-            <GameShowcase />
+            <GameShowcase gameID={gameID}/>
             <TopCurators />
         </div>
     )

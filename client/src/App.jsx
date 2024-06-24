@@ -34,7 +34,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/following" element={<Following />} />
         <Route path="/searchgame/:gameName" element={<SearchGame />} />
-        <Route path="/game" element={<Game />} />
+        <Route path="/game/:gameID" element={<Game />} />
       </Routes>
     </BrowserRouter>
   );
