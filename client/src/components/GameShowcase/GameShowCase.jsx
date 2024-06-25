@@ -4,6 +4,8 @@ import "./GameShowcase.css";
 function GameShowcase(props) {
   const [gameData, setGameData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [reviews, setReviews] = useState(null);
+
   useEffect(() => {
     async function retrieveGameData() {
       const link = "http://localhost:3000/searchGameID/" + props.gameID;
@@ -17,7 +19,22 @@ function GameShowcase(props) {
         setIsLoading(false);
       }
     }
+    async function RetrieveReviews() {
+      const link = "http://localhost:3000/getReview"
+      try {
+        const response = await fetch(link, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ request: "get all review from 123" })
+        });
 
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+    RetrieveReviews();
     retrieveGameData();
   }, [props.gameID]);
 

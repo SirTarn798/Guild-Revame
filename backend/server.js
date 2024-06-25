@@ -1,31 +1,47 @@
 import express from "express";
 import cors from "cors";
 import { configDotenv } from "dotenv";
+import pg from "pg"
+import bodyParser from "body-parser";
 
 configDotenv.apply();
 
+//Connect databse
+const db = new pg.Client({
+  user: "postgres",
+  host: "localhost",
+  database: "Guild Revame",
+  password: process.env.DB_PASSWORD,
+  port: 5432,
+});
+db.connect();
+
+//Initialize server
 const app = express();
 const port = 3000;
+app.listen(port, () => {
+  console.log("Server is running on port 3000...");
+});
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
+//Setup CORS
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
+//IGDB API setup
 const url = "https://api.igdb.com/v4/games/";
 const coversUrl = "https://api.igdb.com/v4/covers/";
 
+//IGDB Header
 const headers = {
   "Client-ID": "zj32fyz6jbnkptbpl0bwi986nlpfde",
   Authorization: "Bearer " + process.env.VITE_IGDB_BEARER,
   "Content-Type": "application/json",
 };
-
-app.listen(port, () => {
-  console.log("Server is running on port 3000...");
-});
-
-const corsOptions = {
-  origin: "http://localhost:5173",
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
 
 app.get("/searchGameName/:gameName", async (req, res) => {
   const gameName = req.params.gameName;
@@ -89,7 +105,7 @@ app.get("/searchGameID/:gameID", async (req, res) => {
   const gameID = req.params.gameID;
   const getGamesBody = `fields id, name, storyline, cover; where id = ${gameID};`;
   try {
-    //get game details
+    //get game detail
     let response = await fetch(url, {
       method: "POST",
       headers: headers,
@@ -97,7 +113,7 @@ app.get("/searchGameID/:gameID", async (req, res) => {
     });
     let gameData = await response.json();
 
-    //get covers
+    //get cover
     const getGamesCoverBody = `fields url; where game = (${gameID});`;
     response = await fetch(coversUrl, {
       method: "POST",
@@ -106,7 +122,7 @@ app.get("/searchGameID/:gameID", async (req, res) => {
     });
     const gameCovers = await response.json();
 
-    //insert image urls to the gameData and change small to huge image
+    //insert image url to the gameData and change small to huge image
     gameData = gameData.map((game) => {
       let matchingObj = gameCovers.find(
         (gameCover) => gameCover.id === game.cover
@@ -128,3 +144,8 @@ app.get("/searchGameID/:gameID", async (req, res) => {
     console.log(err.message);
   }
 });
+
+app.post("/getReview", (req, res) => {
+  const requestType = req.body;
+  console.log(requestType);
+})
