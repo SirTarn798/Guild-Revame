@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./GameShowcase.css";
 import useUserStore from "../../../lib/userStore";
-import {v4 as uuidv4} from "uuid"
+import { v4 as uuidv4 } from "uuid";
 
 function GameShowcase(props) {
   const [gameData, setGameData] = useState(null);
@@ -58,9 +58,11 @@ function GameShowcase(props) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            requestFromGameID: "get all review from 123",
+            requestFromGameID: props.gameID,
           }),
         });
+        const data = await response.json();
+        console.log(data);
       } catch (err) {
         console.log(err.message);
       }
@@ -92,12 +94,12 @@ function GameShowcase(props) {
       </div>
       <div className="aboveReviewsBar">
         <h3>Review</h3>
-        <div class="dropdown">
+        <div className="dropdown">
           <div className="dropdownIndicator">
             <p>Sort by</p>
             <button>Recent</button>
           </div>
-          <div class="content">
+          <div className="content">
             <a href="">Recent</a>
             <a href="">Popular</a>
           </div>
@@ -109,6 +111,7 @@ function GameShowcase(props) {
             name="reviewText"
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
+            placeholder="Write your review here..."
           ></textarea>
           <button>Post review</button>
         </form>

@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import cors from "cors";
 import { configDotenv } from "dotenv";
 import pg from "pg";
@@ -94,7 +94,6 @@ app.get("/searchGameName/:gameName", async (req, res) => {
       }
       return game;
     });
-
     res.json(gameData);
   } catch (err) {
     console.log(err.message);
@@ -145,17 +144,25 @@ app.get("/searchGameID/:gameID", async (req, res) => {
   }
 });
 
-app.post("/getReview", (req, res) => {
+app.post("/getReview", async (req, res) => {
   if (req.body.requestFromGameID) {
-    res.send("xdd");
+    let data;
+    const gameID = req.body.requestFromGameID;
+    const query = `SELECT * FROM reviews where gameid = '${gameID}'`;
+    try {
+      const response = await db.query(query);
+      data = response.rows;
+    } catch (err) {
+      console.log(err.message);
+    }
+    res.json(data);
   }
 });
 
 app.post("/postReview", async (req, res) => {
   const data = req.body;
-  console.log(data);
   const query = `
-    INSERT INTO reviews (id, gameID, reviewerID, reviewText, recommend, dateTime)
+    INSERT INTO reviews (id, gameID, reviewerID, reviewText, recommend, datetime)
     VALUES ($1, $2, $3, $4, $5, $6)
   `;
 
@@ -171,5 +178,5 @@ app.post("/postReview", async (req, res) => {
     await db.query(query, review);
   } catch (err) {
     console.log(err.message);
-  } 
+  }
 });
