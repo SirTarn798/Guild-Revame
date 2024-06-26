@@ -16,7 +16,7 @@
     padding-left: 50px;
     padding-right: 50px;
     width: 100%;
-    
+
     img {
         border-radius: 10px;
         width: 264px;
@@ -42,41 +42,80 @@
     padding: 50px;
 }
 
+.reviewSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.writeReview {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    textarea {
+        padding: 15px;
+        background-color: transparent;
+        color: rgb(211, 210, 210);
+        font-size: 16px;
+        width: 100%;
+        height: 150px;
+        border-radius: 10px;
+        resize: none;
+    }
+
+    button {
+        align-self: self-end;
+        height: 50px;
+        border-radius: 10px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
 .dropdownIndicator {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
-.dropdown{
+.dropdown {
     display: inline-block;
 }
-.dropdown button{
+
+.dropdown button {
     background-color: hsl(0, 0%, 80%);
     color: white;
     padding: 10px 15px;
     border: none;
     cursor: pointer;
 }
-.dropdown a{
+
+.dropdown a {
     display: block;
     color: black;
     text-decoration: none;
     padding: 10px 15px;
 }
-.dropdown .content{
+
+.dropdown .content {
     display: none;
     position: absolute;
     background-color: hsl(0, 0%, 95%);
     min-width: 100px;
     box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.8);
 }
-.dropdown:hover .content{
+
+.dropdown:hover .content {
     display: block;
 }
-.dropdown:hover button{
+
+.dropdown:hover button {
     background-color: hsl(0, 0%, 70%);
 }
-.dropdown a:hover{
+
+.dropdown a:hover {
     background-color: hsl(0, 0%, 90%);
 }

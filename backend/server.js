@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { configDotenv } from "dotenv";
-import pg from "pg"
+import pg from "pg";
 import bodyParser from "body-parser";
 
 configDotenv.apply();
@@ -146,6 +146,30 @@ app.get("/searchGameID/:gameID", async (req, res) => {
 });
 
 app.post("/getReview", (req, res) => {
-  const requestType = req.body;
-  console.log(requestType);
-})
+  if (req.body.requestFromGameID) {
+    res.send("xdd");
+  }
+});
+
+app.post("/postReview", async (req, res) => {
+  const data = req.body;
+  console.log(data);
+  const query = `
+    INSERT INTO reviews (id, gameID, reviewerID, reviewText, recommend, dateTime)
+    VALUES ($1, $2, $3, $4, $5, $6)
+  `;
+
+  const review = [
+    data.id,
+    data.gameID,
+    data.reviewerID,
+    data.reviewText,
+    data.recommend,
+    data.dateTime,
+  ];
+  try {
+    await db.query(query, review);
+  } catch (err) {
+    console.log(err.message);
+  } 
+});

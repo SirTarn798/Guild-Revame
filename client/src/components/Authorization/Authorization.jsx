@@ -5,7 +5,6 @@ import {
 import "./Authorization.css";
 import { auth } from "../../../lib/firebase";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import useUserStore from "../../../lib/userStore";
 
 function Authorization() {
@@ -19,8 +18,6 @@ function Authorization() {
   const [authStatus, setAuthStatus] = useState("");
   const [disableButtons, setDisableButtons] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const navigate = useNavigate();
 
   const {currentUser} = useUserStore();
 

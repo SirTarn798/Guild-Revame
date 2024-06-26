@@ -1,10 +1,40 @@
 import { useEffect, useState } from "react";
 import "./GameShowcase.css";
+import useUserStore from "../../../lib/userStore";
+import {v4 as uuidv4} from "uuid"
 
 function GameShowcase(props) {
   const [gameData, setGameData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [reviews, setReviews] = useState(null);
+  const { currentUser } = useUserStore();
+
+  const [reviewText, setReviewText] = useState("");
+
+  const postReview = async (e) => {
+    e.preventDefault();
+    const body = {
+      id: uuidv4(),
+      gameID: props.gameID,
+      reviewerID: currentUser,
+      reviewText: reviewText,
+      recommend: true,
+      dateTime: new Date().toISOString(),
+    };
+
+    const link = "http://localhost:3000/postReview";
+    try {
+      const response = await fetch(link, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   useEffect(() => {
     async function retrieveGameData() {
@@ -19,22 +49,23 @@ function GameShowcase(props) {
         setIsLoading(false);
       }
     }
-    async function RetrieveReviews() {
-      const link = "http://localhost:3000/getReview"
+    async function retrieveReviews() {
+      const link = "http://localhost:3000/getReview";
       try {
         const response = await fetch(link, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ request: "get all review from 123" })
+          body: JSON.stringify({
+            requestFromGameID: "get all review from 123",
+          }),
         });
-
       } catch (err) {
         console.log(err.message);
       }
     }
-    RetrieveReviews();
+    retrieveReviews();
     retrieveGameData();
   }, [props.gameID]);
 
@@ -51,7 +82,11 @@ function GameShowcase(props) {
       <div className="fullGameDetail">
         <img src={gameData[0].url ? gameData[0].url : "/nopic.png"} alt="" />
         <div className="storylineAndRating">
-          <p>{gameData[0].storyline ? gameData[0].storyline : "The storyline of this game is unavailable."}</p>
+          <p>
+            {gameData[0].storyline
+              ? gameData[0].storyline
+              : "The storyline of this game is unavailable."}
+          </p>
           <p className="rating">92% of 125 people recommend this game.</p>
         </div>
       </div>
@@ -67,6 +102,16 @@ function GameShowcase(props) {
             <a href="">Popular</a>
           </div>
         </div>
+      </div>
+      <div className="reviewSection">
+        <form className="writeReview" onSubmit={postReview}>
+          <textarea
+            name="reviewText"
+            value={reviewText}
+            onChange={(e) => setReviewText(e.target.value)}
+          ></textarea>
+          <button>Post review</button>
+        </form>
       </div>
     </div>
   );
