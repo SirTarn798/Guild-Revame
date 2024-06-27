@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./GameShowcase.css";
 import useUserStore from "../../../lib/userStore";
 import { v4 as uuidv4 } from "uuid";
+import FullGameReview from "./FullGameReview/FullGameReview";
 
 function GameShowcase(props) {
   const [gameData, setGameData] = useState(null);
@@ -10,6 +11,8 @@ function GameShowcase(props) {
   const { currentUser } = useUserStore();
 
   const [reviewText, setReviewText] = useState("");
+
+  let posted = false;
 
   const postReview = async (e) => {
     e.preventDefault();
@@ -20,6 +23,7 @@ function GameShowcase(props) {
       reviewText: reviewText,
       recommend: true,
       dateTime: new Date().toISOString(),
+      like: 0,
     };
 
     const link = "http://localhost:3000/postReview";
@@ -62,7 +66,7 @@ function GameShowcase(props) {
           }),
         });
         const data = await response.json();
-        console.log(data);
+        setReviews(data);
       } catch (err) {
         console.log(err.message);
       }
@@ -108,13 +112,29 @@ function GameShowcase(props) {
       <div className="reviewSection">
         <form className="writeReview" onSubmit={postReview}>
           <textarea
+            disabled={
+              reviews.some((review) => review.reviewerid === currentUser)
+            }
             name="reviewText"
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
-            placeholder="Write your review here..."
+            placeholder={
+              reviews.some((review) => review.reviewerid === currentUser)
+                ? "You have already reviewd this game."
+                : "Write your review here..."
+            }
           ></textarea>
-          <button>Post review</button>
+          <button
+            disabled={
+              reviews.some((review) => review.reviewerid === currentUser)
+            }
+          >
+            Post review
+          </button>
         </form>
+        {reviews.map((review) => {
+          return <FullGameReview review={review} key={review.id} />;
+        })}
       </div>
     </div>
   );

@@ -1,9 +1,9 @@
 import "./InteractionTab.css";
 
-function InteractionTab() {
+function InteractionTab(props) {
   return (
     <div className="interactionTabContainer">
-      <div className="interaction likeInteraction">
+      <div className={"interaction " + (!props.hasliked ? "hasLikedInteraction" : "hasntLikedInteraction")}>
         <img src="/like.png" />
         <p>Like</p>
       </div>

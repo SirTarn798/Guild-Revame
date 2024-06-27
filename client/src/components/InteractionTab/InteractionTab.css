@@ -1,34 +1,36 @@
 .interactionTabContainer {
-    display: flex;
-    padding-top: 15px;
-    justify-content: center;
-    gap: 150px;
+  display: flex;
+  padding-top: 15px;
+  justify-content: center;
+  gap: 150px;
 }
 
 .interaction {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    img {
-        width: 25px;
-        height: 25px;
-    }
-    cursor: pointer;
-    transition-duration: 500ms;
-    padding: 5px;
-    padding-left: 15px;
-    padding-right: 15px;
-    border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  img {
+    width: 25px;
+    height: 25px;
+  }
+  cursor: pointer;
+  transition-duration: 500ms;
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 15px;
 }
 
-.likeInteraction:hover {
-    background-color:rgba(202, 88, 107, 0.644)
+.hasLikedInteraction {
+  background-color: rgba(202, 88, 107, 0.644);
+}
+
+.hasntLikedInteraction:hover {
+  background-color: rgba(202, 88, 107, 0.644);
 }
 .shareInteraction:hover {
-    background-color: rgba(78, 226, 177, 0.425);
+  background-color: rgba(78, 226, 177, 0.425);
 }
 .commentInteraction:hover {
-    background-color: rgba(63, 111, 216, 0.411);
+  background-color: rgba(63, 111, 216, 0.411);
 }
-
-

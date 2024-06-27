@@ -1,0 +1,44 @@
+.fullGameReview {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 80%;
+    padding-bottom: 15px;
+    margin-top: 15px;
+    border-bottom: 1px solid rgb(211, 210, 210);
+    .topReview {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .userDetail {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        img {
+            width: 70px;
+            height: 70px;
+        }
+        p {
+            cursor: pointer;
+        }
+    }
+
+    .recommendation {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        img {
+            width: 30px;
+            height: 30px;
+        }
+        p {
+            color: white;
+        }
+        padding: 5px;
+        border-radius: 10px;
+        background-color: rgba(172, 255, 47, 0.647);
+    }
+
+}
