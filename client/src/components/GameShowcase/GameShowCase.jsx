@@ -44,7 +44,7 @@ function GameShowcase(props) {
         const data = await response.json();
         setGameData(data);
       } catch (error) {
-        console.error("Error fetching game data:", error);
+        console.log("Error fetching game data:", error);
       } finally {
         setIsLoading(false);
       }

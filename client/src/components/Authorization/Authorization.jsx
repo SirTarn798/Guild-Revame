@@ -19,7 +19,7 @@ function Authorization() {
   const [disableButtons, setDisableButtons] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const {currentUser} = useUserStore();
+  const { currentUser } = useUserStore();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -50,10 +50,26 @@ function Authorization() {
     const formData = new FormData(e.target);
     const { email, username, password } = Object.fromEntries(formData);
     try {
-      if (email === "" || password === "") {
+      if (email === "" || password === "" || username === "") {
         throw new Error("All fields are required");
       }
-      const res = await createUserWithEmailAndPassword(auth, email, password);
+      let res = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = res.user.uid;
+      const link = "http://localhost:3000/addUser";
+      const body = {
+        id: uid,
+        username: username,
+        pfp: "/user.png",
+      };
+
+      res = await fetch(link, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+
       setAuthStatus("success");
     } catch (err) {
       setErrorMessage(err.message);

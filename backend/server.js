@@ -180,3 +180,18 @@ app.post("/postReview", async (req, res) => {
     console.log(err.message);
   }
 });
+
+app.post("/addUser", async (req, res) => {
+  const data = req.body;
+  const query = `
+  INSERT INTO users (id, username, pfp)
+  VALUES ($1, $2, $3)
+  `;
+
+  const user = [data.id, data.username, data.pfp];
+  try {
+    await db.query(query, user);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
