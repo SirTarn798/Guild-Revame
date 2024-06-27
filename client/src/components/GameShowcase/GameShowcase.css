@@ -55,6 +55,7 @@
     flex-direction: column;
     align-items: center;
     gap: 15px;
+    margin-bottom: 15px;
     textarea {
         padding: 15px;
         background-color: transparent;

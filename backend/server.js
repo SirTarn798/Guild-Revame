@@ -148,7 +148,18 @@ app.post("/getReview", async (req, res) => {
   if (req.body.requestFromGameID) {
     let data;
     const gameID = req.body.requestFromGameID;
-    const query = `SELECT * FROM reviews where gameid = '${gameID}'`;
+    const query = `
+    SELECT reviews.*, users.*,
+           EXISTS (
+               SELECT 1
+               FROM likes
+               WHERE likes.userid = users.userid
+               AND likes.reviewid = reviews.reviewid
+           ) AS hasLiked
+    FROM reviews
+    JOIN users ON users.userid = reviews.reviewerid
+    WHERE reviews.gameid = '${gameID}';
+    `;
     try {
       const response = await db.query(query);
       data = response.rows;
@@ -162,8 +173,8 @@ app.post("/getReview", async (req, res) => {
 app.post("/postReview", async (req, res) => {
   const data = req.body;
   const query = `
-    INSERT INTO reviews (id, gameID, reviewerID, reviewText, recommend, datetime)
-    VALUES ($1, $2, $3, $4, $5, $6)
+    INSERT INTO reviews (reviewid, gameID, reviewerID, reviewText, recommend, datetime, "like")
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
   `;
 
   const review = [
@@ -173,6 +184,7 @@ app.post("/postReview", async (req, res) => {
     data.reviewText,
     data.recommend,
     data.dateTime,
+    data.like,
   ];
   try {
     await db.query(query, review);
@@ -184,7 +196,7 @@ app.post("/postReview", async (req, res) => {
 app.post("/addUser", async (req, res) => {
   const data = req.body;
   const query = `
-  INSERT INTO users (id, username, pfp)
+  INSERT INTO users (userid, username, pfp)
   VALUES ($1, $2, $3)
   `;
 

@@ -4,7 +4,7 @@
   padding: 15px;
   gap: 20px;
   color: rgb(211, 210, 210);
-  
+  cursor: pointer;
   scrollbar-gutter: stable;
   height: 100%px;
   .gameDetail {
