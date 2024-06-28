@@ -1,4 +1,4 @@
-import express, { response } from "express";
+import express, { query, response } from "express";
 import cors from "cors";
 import { configDotenv } from "dotenv";
 import pg from "pg";
@@ -206,4 +206,28 @@ app.post("/addUser", async (req, res) => {
   } catch (err) {
     console.log(err.message);
   }
+});
+
+app.post("/handleLike", async (req, res) => {
+  let query = "";
+  let msg;
+  const data = req.body.body;
+  if (data.action === "like") {
+    query = `INSERT INTO "likes" VALUES ('${data.userid}', '${data.reviewid}');
+    UPDATE reviews SET "like" = "like" + 1 WHERE reviewid = '${data.reviewid}';
+    `
+    msg = "liked";
+  } 
+  else if (data.action === "unlike") {
+    query = `DELETE FROM likes WHERE userid = '${data.userid}' AND reviewid = '${data.reviewid}';
+    UPDATE reviews SET "like" = "like" - 1 WHERE reviewid = '${data.reviewid}';
+    `
+    msg = "unliked";
+  }
+  try {
+    const response = await db.query(query);
+  } catch(err) {
+    console.log(err.message);
+  }
+  res.send(msg);
 });

@@ -21,7 +21,7 @@ function FullGameReview(props) {
         </div>
       </div>
       <p>{props.review.reviewtext}</p>
-      <InteractionTab reviewid={props.review.reviewid} userid={props.review.userid} like={props.review.hasliked}/>
+      <InteractionTab reviewid={props.review.reviewid} userid={props.review.userid} hasliked={props.review.hasliked}/>
     </div>
   );
 }
