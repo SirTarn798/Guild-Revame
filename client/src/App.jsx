@@ -8,6 +8,7 @@ import useUserStore from "../lib/userStore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import Game from "./pages/Game/Game";
+import User from "./pages/User/User";
 
 function App() {
   const { currentUser, isLoading, fetchUserInfo } = useUserStore();
@@ -35,6 +36,7 @@ function App() {
         <Route path="/following" element={<Following />} />
         <Route path="/searchgame/:gameName" element={<SearchGame />} />
         <Route path="/game/:gameID" element={<Game />} />
+        <Route path="/user/:username" element={<User />} />
       </Routes>
     </BrowserRouter>
   );

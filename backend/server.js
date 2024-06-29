@@ -167,14 +167,36 @@ app.post("/getReview", async (req, res) => {
       console.log(err.message);
     }
     res.json(data);
+  } else if (req.body.requestFromUsername) {
+    let data;
+    const username = req.body.requestFromUsername;
+    const query = `
+    SELECT reviews.*, users.*,
+           EXISTS (
+               SELECT 1
+               FROM likes
+               WHERE likes.userid = users.userid
+               AND likes.reviewid = reviews.reviewid
+           ) AS hasLiked
+    FROM reviews
+    JOIN users ON users.userid = reviews.reviewerid
+    WHERE users.username = '${username}';
+    `;
+    try {
+      const response = await db.query(query);
+      data = response.rows;
+    } catch (err) {
+      console.log(err.message);
+    }
+    res.json(data);
   }
 });
 
 app.post("/postReview", async (req, res) => {
   const data = req.body;
   const query = `
-    INSERT INTO reviews (reviewid, gameID, reviewerID, reviewText, recommend, datetime, "like")
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO reviews (reviewid, gameID, reviewerID, reviewText, recommend, datetime, "like", gamename)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
   `;
 
   const review = [
@@ -185,6 +207,7 @@ app.post("/postReview", async (req, res) => {
     data.recommend,
     data.dateTime,
     data.like,
+    data.gamename,
   ];
   try {
     await db.query(query, review);
@@ -215,18 +238,17 @@ app.post("/handleLike", async (req, res) => {
   if (data.action === "like") {
     query = `INSERT INTO "likes" VALUES ('${data.userid}', '${data.reviewid}');
     UPDATE reviews SET "like" = "like" + 1 WHERE reviewid = '${data.reviewid}';
-    `
+    `;
     msg = "liked";
-  } 
-  else if (data.action === "unlike") {
+  } else if (data.action === "unlike") {
     query = `DELETE FROM likes WHERE userid = '${data.userid}' AND reviewid = '${data.reviewid}';
     UPDATE reviews SET "like" = "like" - 1 WHERE reviewid = '${data.reviewid}';
-    `
+    `;
     msg = "unliked";
   }
   try {
     const response = await db.query(query);
-  } catch(err) {
+  } catch (err) {
     console.log(err.message);
   }
   res.send(msg);

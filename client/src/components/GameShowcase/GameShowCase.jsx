@@ -19,6 +19,7 @@ function GameShowcase(props) {
     const body = {
       id: uuidv4(),
       gameID: props.gameID,
+      gamename: gameData[0].name,
       reviewerID: currentUser,
       reviewText: reviewText,
       recommend: true,
