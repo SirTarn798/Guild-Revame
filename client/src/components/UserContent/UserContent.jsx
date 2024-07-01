@@ -1,15 +1,19 @@
 import "./UserContent.css";
 import FullGameReview from "../GameShowcase/FullGameReview/FullGameReview";
 import { useEffect, useState } from "react";
+import useUserStore from "../../../lib/userStore";
 
 function UserContent(props) {
   const [reviews, setReviews] = useState([]);
+  const [user, setUser] = useState({});
+  const { currentUser } = useUserStore();
 
   useEffect(() => {
-    async function retrieveReviews() {
-      const link = "http://localhost:3000/getReview";
+    async function retrieveUsersInfo() {
+      const linkReview = "http://localhost:3000/getReview";
+      const linkUser = "http://localhost:3000/getUser";
       try {
-        const response = await fetch(link, {
+        let response = await fetch(linkReview, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -18,14 +22,26 @@ function UserContent(props) {
             requestFromUsername: props.username,
           }),
         });
-        const data = await response.json();
+        let data = await response.json();
         setReviews(data);
+
+        response = await fetch(linkUser, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            requestFromUsername: props.username,
+          }),
+        });
+        data = await response.json();
         console.log(data);
+        setUser(data);
       } catch (err) {
         console.log(err.message);
       }
     }
-    retrieveReviews();
+    retrieveUsersInfo();
   }, [props.username]);
 
   return (
@@ -43,7 +59,17 @@ function UserContent(props) {
             <p>500 Followers 2 Following</p>
           </div>
         </div>
-        <button>Follow</button>
+        <button
+          style={{ display: currentUser === user.userid ? "none" : "block" }}
+        >
+          Follow
+        </button>
+        <button
+          className="editUserButton"
+          style={{ display: !(currentUser === user.userid) ? "none" : "block" }}
+        >
+          Edit User
+        </button>
       </div>
       <div className="usersReviewSection">
         <div className="aboveReviewsBar">
@@ -61,7 +87,9 @@ function UserContent(props) {
         </div>
         <div className="usersReviews">
           {reviews.map((review) => {
-            return <FullGameReview review={review} key={review.id} from="user"/>;
+            return (
+              <FullGameReview review={review} key={review.id} from="user" />
+            );
           })}
         </div>
       </div>

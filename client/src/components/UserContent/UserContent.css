@@ -1,119 +1,128 @@
 .userContent {
-    flex: 3;
-    display: flex;
-    flex-direction: column;
-    background-color: rgba(46, 45, 45, 0.795);
-    overflow: scroll;
-    overflow-x: hidden;
-    padding: 10px;
-    position: relative;
-    color: rgb(211, 210, 210);
-
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(46, 45, 45, 0.795);
+  overflow: scroll;
+  overflow-x: hidden;
+  padding: 10px;
+  position: relative;
+  color: rgb(211, 210, 210);
 }
 
 .userPageDetail {
-    display: flex;
-    position: absolute;
-    top: 340px;
-    padding-left: 50px;
-    align-items: center;
-    justify-content: space-between;
-    width: 85%;
-    button {
-        height: 45px;
-        padding: 0 15px;
-        border-radius: 10px;
-        border: none;
-        background-color: rgba(63, 111, 216, 0.603);
-        color: rgb(211, 210, 210);
-        cursor: pointer;
-        font-size: large;
-        font-weight: bold;
-    }
+  display: flex;
+  position: absolute;
+  top: 340px;
+  padding-left: 50px;
+  align-items: center;
+  justify-content: space-between;
+  width: 85%;
+  button {
+    height: 45px;
+    padding: 0 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: large;
+    font-weight: bold;
+  }
+}
+
+.followButton {
+  border: none;
+  background-color: rgba(63, 111, 216, 0.603);
+  color: rgb(211, 210, 210);
 }
 
 .userPageDetailText {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .imgAndTextUser {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    img {
-        width: 100px;
-        height: 100px;
-    }
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  img {
+    width: 100px;
+    height: 100px;
+  }
 }
 
 .usersReviewSection {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .usersReviews {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
 }
 
 .aboveReviewsBar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 15px;
 }
 
 .backgroundImage {
-    width: 100%;
-    height: 350px;
-    margin-bottom: 150px;
+  width: 100%;
+  height: 350px;
+  margin-bottom: 150px;
+}
+
+.editUserButton {
+  border: 3px solid;
+  border-color: rgb(211, 210, 210);
+  background-color: transparent;
+  color: rgb(211, 210, 210);
 }
 
 .dropdownIndicator {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .dropdown {
-    display: inline-block;
+  display: inline-block;
 }
 
 .dropdown button {
-    background-color: hsl(0, 0%, 80%);
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
+  background-color: hsl(0, 0%, 80%);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
 }
 
 .dropdown a {
-    display: block;
-    color: black;
-    text-decoration: none;
-    padding: 10px 15px;
+  display: block;
+  color: black;
+  text-decoration: none;
+  padding: 10px 15px;
 }
 
 .dropdown .content {
-    display: none;
-    position: absolute;
-    background-color: hsl(0, 0%, 95%);
-    min-width: 100px;
-    box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.8);
+  display: none;
+  position: absolute;
+  background-color: hsl(0, 0%, 95%);
+  min-width: 100px;
+  box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.8);
 }
 
 .dropdown:hover .content {
-    display: block;
+  display: block;
 }
 
 .dropdown:hover button {
-    background-color: hsl(0, 0%, 70%);
+  background-color: hsl(0, 0%, 70%);
 }
 
 .dropdown a:hover {
-    background-color: hsl(0, 0%, 90%);
+  background-color: hsl(0, 0%, 90%);
 }

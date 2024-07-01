@@ -177,7 +177,13 @@ app.post("/getReview", async (req, res) => {
                FROM likes
                WHERE likes.userid = users.userid
                AND likes.reviewid = reviews.reviewid
-           ) AS hasLiked
+           ) AS hasLiked,
+          EXISTS (
+              SELECT 1 
+              FROM saved 
+              WHERE saved.userid = users.userid 
+              AND saved.reviewid = reviews.reviewid
+           ) AS hasSaved
     FROM reviews
     JOIN users ON users.userid = reviews.reviewerid
     WHERE users.username = '${username}';
@@ -252,4 +258,28 @@ app.post("/handleLike", async (req, res) => {
     console.log(err.message);
   }
   res.send(msg);
+});
+
+app.post("/getUser", async (req, res) => {
+  if (req.body.requestFromUsername) {
+    const username = req.body.requestFromUsername;
+    let user;
+    const query = `select * from users where username = '${username}'`;
+    try {
+      const response = await db.query(query);
+      user = response.rows;
+    } catch (err) {
+      console.log(err.message);
+    }
+    res.json(user);
+  }
+});
+
+app.post("/handleSaveReview", (req, res) => {
+  const body = req.body;
+  let msg;
+  if(body.action === "saved") {
+    const query = `INSERT INTO "likes" VALUES ('${data.userid}', '${data.reviewid}');`
+
+  }
 });

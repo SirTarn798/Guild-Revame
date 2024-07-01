@@ -5,6 +5,8 @@ import { useState } from "react";
 function InteractionTab(props) {
   const { currentUser } = useUserStore();
   const [hasLiked, setHasLiked] = useState(props.hasliked);
+  const [hasSaved, setHasSaved] = useState(props.hasSaved);
+
   const handleLike = async () => {
     let body;
     if (!hasLiked) {
@@ -35,6 +37,37 @@ function InteractionTab(props) {
     }
   };
 
+  const handleSave = async () => {
+    let body;
+    if (!hasSaved) {
+      body = { action: "saved" };
+    } else {
+      body = { action: "unsaved" };
+    }
+    const link = "http://localhost:3000/handleSaveReview"
+    body.userid = currentUser;
+    body.reviewid = props.reviewid;
+    try {
+    const response = await fetch(link, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ body }),
+    });
+    const data = await response.text();
+    if(data === "saved") {
+      setHasLiked(true);
+    }
+    else if(data === "unsaved") {
+      setHasLiked(false)
+    }
+  } catch(err) {
+      console.log(err.message);
+    }
+  };
+  
+
   return (
     <div className="interactionTabContainer">
       <div
@@ -49,7 +82,11 @@ function InteractionTab(props) {
       </div>
       <div className="interaction shareInteraction">
         <img src="/share.png" />
-        <p>share</p>
+        <p>Share</p>
+      </div>
+      <div className="interaction savedInteraction" onClick={handleSave}>
+        <img src="/saved.png" />
+        <p>Save</p>
       </div>
     </div>
   );

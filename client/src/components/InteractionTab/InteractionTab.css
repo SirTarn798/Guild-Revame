@@ -31,6 +31,6 @@
 .shareInteraction:hover {
   background-color: rgba(78, 226, 177, 0.425);
 }
-.commentInteraction:hover {
+.savedInteraction:hover {
   background-color: rgba(63, 111, 216, 0.411);
 }
