@@ -25,6 +25,14 @@
   background-color: rgba(202, 88, 107, 0.644);
 }
 
+.hasSavedInteraction {
+  background-color: rgba(63, 111, 216, 0.411);
+}
+
+.hasntSavedInteraction:hover {
+  background-color: rgba(63, 111, 216, 0.411);
+}
+
 .hasntLikedInteraction:hover {
   background-color: rgba(202, 88, 107, 0.644);
 }

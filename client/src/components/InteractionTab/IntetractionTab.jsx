@@ -57,10 +57,10 @@ function InteractionTab(props) {
     });
     const data = await response.text();
     if(data === "saved") {
-      setHasLiked(true);
+      setHasSaved(true);
     }
     else if(data === "unsaved") {
-      setHasLiked(false)
+      setHasSaved(false)
     }
   } catch(err) {
       console.log(err.message);
@@ -84,7 +84,10 @@ function InteractionTab(props) {
         <img src="/share.png" />
         <p>Share</p>
       </div>
-      <div className="interaction savedInteraction" onClick={handleSave}>
+      <div className={
+          "interaction " +
+          (hasSaved ? "hasSavedInteraction" : "hasntSavedInteraction")
+        } onClick={handleSave}>
         <img src="/saved.png" />
         <p>Save</p>
       </div>

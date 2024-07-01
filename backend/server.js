@@ -275,11 +275,21 @@ app.post("/getUser", async (req, res) => {
   }
 });
 
-app.post("/handleSaveReview", (req, res) => {
-  const body = req.body;
+app.post("/handleSaveReview", async (req, res) => {
+  const data = req.body.body;
   let msg;
-  if(body.action === "saved") {
-    const query = `INSERT INTO "likes" VALUES ('${data.userid}', '${data.reviewid}');`
-
+  let query;
+  if (data.action === "saved") {
+    query = `INSERT INTO "saved" VALUES ('${data.userid}', '${data.reviewid}');`;
+    msg = "saved";
+  } else if (data.action === "unsaved") {
+    query = `DELETE FROM "saved" WHERE userid = '${data.userid}' AND reviewid = '${data.reviewid}';`;
+    msg = "unsaved";
   }
+  try {
+    const response = await db.query(query);
+  } catch (err) {
+    console.log(err);
+  }
+  res.send(msg);
 });
