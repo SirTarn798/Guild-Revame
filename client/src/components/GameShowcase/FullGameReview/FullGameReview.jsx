@@ -41,6 +41,7 @@ function FullGameReview(props) {
         reviewid={props.review.reviewid}
         userid={props.review.userid}
         hasliked={props.review.hasliked}
+        hassaved={props.review.hassaved}
       />
     </div>
   );

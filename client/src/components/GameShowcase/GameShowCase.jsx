@@ -64,6 +64,7 @@ function GameShowcase(props) {
           },
           body: JSON.stringify({
             requestFromGameID: props.gameID,
+            userid: currentUser,
           }),
         });
         const data = await response.json();

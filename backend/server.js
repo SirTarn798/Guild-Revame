@@ -148,14 +148,21 @@ app.post("/getReview", async (req, res) => {
   if (req.body.requestFromGameID) {
     let data;
     const gameID = req.body.requestFromGameID;
+    const userid = req.body.userid;
     const query = `
     SELECT reviews.*, users.*,
            EXISTS (
                SELECT 1
                FROM likes
-               WHERE likes.userid = users.userid
+               WHERE likes.userid = '${userid}'
                AND likes.reviewid = reviews.reviewid
-           ) AS hasLiked
+           ) AS hasLiked,
+            EXISTS (
+              SELECT 1 
+              FROM saved 
+              WHERE saved.userid = '${userid}'
+              AND saved.reviewid = reviews.reviewid
+           ) AS hasSaved
     FROM reviews
     JOIN users ON users.userid = reviews.reviewerid
     WHERE reviews.gameid = '${gameID}';
@@ -292,4 +299,8 @@ app.post("/handleSaveReview", async (req, res) => {
     console.log(err);
   }
   res.send(msg);
+});
+
+app.post("getSavedReviews", async (req, res) => {
+  const query = `SELECT `;
 });

@@ -5,8 +5,8 @@ import { useState } from "react";
 function InteractionTab(props) {
   const { currentUser } = useUserStore();
   const [hasLiked, setHasLiked] = useState(props.hasliked);
-  const [hasSaved, setHasSaved] = useState(props.hasSaved);
-
+  const [hasSaved, setHasSaved] = useState(props.hassaved);
+  console.log(props);
   const handleLike = async () => {
     let body;
     if (!hasLiked) {
@@ -56,6 +56,7 @@ function InteractionTab(props) {
       body: JSON.stringify({ body }),
     });
     const data = await response.text();
+    console.log(data); 
     if(data === "saved") {
       setHasSaved(true);
     }

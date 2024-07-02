@@ -35,7 +35,6 @@ function UserContent(props) {
           }),
         });
         data = await response.json();
-        console.log(data);
         setUser(data);
       } catch (err) {
         console.log(err.message);
