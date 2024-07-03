@@ -9,6 +9,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import Game from "./pages/Game/Game";
 import User from "./pages/User/User";
+import Saved from "./pages/Saved/Saved";
 
 function App() {
   const { currentUser, isLoading, fetchUserInfo } = useUserStore();
@@ -37,6 +38,7 @@ function App() {
         <Route path="/searchgame/:gameName" element={<SearchGame />} />
         <Route path="/game/:gameID" element={<Game />} />
         <Route path="/user/:username" element={<User />} />
+        <Route path="/saved" element={<Saved />} />
       </Routes>
     </BrowserRouter>
   );
