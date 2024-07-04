@@ -6,7 +6,6 @@ function InteractionTab(props) {
   const { currentUser } = useUserStore();
   const [hasLiked, setHasLiked] = useState(props.hasliked);
   const [hasSaved, setHasSaved] = useState(props.hassaved);
-  console.log(props);
   const handleLike = async () => {
     let body;
     if (!hasLiked) {

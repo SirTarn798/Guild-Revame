@@ -4,10 +4,11 @@ import TopCurators from "../../components/TopCurators/TopCurators";
 import { useEffect, useState } from "react";
 import useUserStore from "../../../lib/userStore";
 import { json } from "react-router-dom";
+import FullGameReview from "../../components/GameShowcase/FullGameReview/FullGameReview";
 
 function Saved(props) {
   const { currentUser } = useUserStore();
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     async function getSavedReivews() {
@@ -16,10 +17,9 @@ function Saved(props) {
         const response = await fetch(link, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({userid: currentUser}),
+          body: JSON.stringify({ userid: currentUser }),
         });
         const res = await response.json();
-        console.log(res);
         setData(res);
       } catch (err) {
         console.log(err.message);
@@ -28,11 +28,18 @@ function Saved(props) {
     getSavedReivews();
   }, [currentUser]);
 
-  <div className="savedReviewsContainer">
-    <Navigator />
-    <div className="savedReviews"></div>
-    <TopCurators />
-  </div>;
+  return (
+    <div className="savedReviewsContainer">
+      <Navigator />
+      <div className="savedReviews">
+        <h1>Your Saved Reviews.</h1>
+        {data.map((review) => {
+          return <FullGameReview review={review} key={review.id} from="user" />;
+        })}
+      </div>
+      <TopCurators />
+    </div>
+  );
 }
 
 export default Saved;

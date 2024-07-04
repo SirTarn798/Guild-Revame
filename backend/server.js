@@ -268,18 +268,22 @@ app.post("/handleLike", async (req, res) => {
 });
 
 app.post("/getUser", async (req, res) => {
+  let query;
   if (req.body.requestFromUsername) {
     const username = req.body.requestFromUsername;
-    let user;
-    const query = `select * from users where username = '${username}'`;
-    try {
-      const response = await db.query(query);
-      user = response.rows;
-    } catch (err) {
-      console.log(err.message);
-    }
-    res.json(user);
+    query = `select * from users where username = '${username}'`;
+  } else if (req.body.requestFromUserID) {
+    const userid = req.body.requestFromUserID;
+    query = `select * from users where userid = '${userid}'`;
   }
+  let user;
+  try {
+    const response = await db.query(query);
+    user = response.rows;
+  } catch (err) {
+    console.log(err.message);
+  }
+  res.json(user);
 });
 
 app.post("/handleSaveReview", async (req, res) => {
@@ -301,6 +305,33 @@ app.post("/handleSaveReview", async (req, res) => {
   res.send(msg);
 });
 
-app.post("getSavedReviews", async (req, res) => {
-  const query = `SELECT `;
+app.post("/getSavedReviews", async (req, res) => {
+  const userid = req.body.userid;
+  const query = `
+  SELECT reviews.*, users.*,
+   EXISTS (
+               SELECT 1
+               FROM likes
+               WHERE likes.userid = users.userid
+               AND likes.reviewid = reviews.reviewid
+           ) AS hasLiked,
+          EXISTS (
+              SELECT 1 
+              FROM saved 
+              WHERE saved.userid = users.userid 
+              AND saved.reviewid = reviews.reviewid
+           ) AS hasSaved 
+  FROM saved 
+  JOIN reviews ON reviews.reviewid = saved.reviewid
+  JOIN users ON users.userid = saved.userid
+  WHERE saved.userid = '${userid}'
+  `;
+  let data;
+  try {
+    const response = await db.query(query);
+    data = response.rows;
+  } catch (err) {
+    console.log(err);
+  }
+  res.json(data);
 });

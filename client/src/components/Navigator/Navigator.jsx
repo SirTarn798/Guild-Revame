@@ -4,7 +4,8 @@ import { auth } from "../../../lib/firebase";
 
 function Navigator() {
 
-  const {fetchUserInfo} = useUserStore();
+  const {currentUsername} = useUserStore();
+  console.log(currentUsername);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -25,7 +26,7 @@ function Navigator() {
           <img src="/people.png" />
           <p>Following</p>
         </a>
-        <a href="/profile">
+        <a href={`/user/${currentUsername}`}>
           <img src="/user.png" />
           <p>Profile</p>
         </a>
