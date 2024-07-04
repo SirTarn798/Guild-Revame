@@ -1,0 +1,62 @@
+.editUserPanel {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(46, 45, 45, 0.795);
+  overflow: scroll;
+  overflow-x: hidden;
+  padding: 10px;
+  color: rgb(211, 210, 210);
+  align-items: center;
+}
+
+.editUserElementContainer {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(80, 80, 79, 0.699);
+    padding: 50px;
+    width: 75%;
+    gap: 40px;
+    margin-top: 40px;
+    border-radius: 15px;
+
+    button {
+        padding: 10px;
+        background-color: rgba(63, 111, 216, 0.603);
+        color: rgb(211, 210, 210);
+        font-weight: bold;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: rgba(117, 148, 214, 0.603);
+
+    }
+}
+
+.editUserElement {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    img {
+        width: 75px;
+        height: 75px;
+    }
+
+    label:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    input {
+        padding: 10px;
+        background-color: rgba(87, 86, 86, 0.681);
+        color: rgb(211, 210, 210);
+        border: none;
+        border-radius: 5px;
+    }
+}
+

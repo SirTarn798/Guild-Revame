@@ -15,7 +15,6 @@ function GameShowcase(props) {
   let posted = false;
 
   const postReview = async (e) => {
-    e.preventDefault();
     const body = {
       id: uuidv4(),
       gameID: props.gameID,

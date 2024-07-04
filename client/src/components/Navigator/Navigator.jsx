@@ -5,7 +5,6 @@ import { auth } from "../../../lib/firebase";
 function Navigator() {
 
   const {currentUsername} = useUserStore();
-  console.log(currentUsername);
 
   const handleLogout = (e) => {
     e.preventDefault();

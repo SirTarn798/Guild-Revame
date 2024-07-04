@@ -9,6 +9,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import Game from "./pages/Game/Game";
 import User from "./pages/User/User";
+import EditUser from "./pages/EditUser/EditUser";
 import Saved from "./pages/Saved/Saved";
 
 function App() {
@@ -39,6 +40,8 @@ function App() {
         <Route path="/game/:gameID" element={<Game />} />
         <Route path="/user/:username" element={<User />} />
         <Route path="/saved" element={<Saved />} />
+        <Route path="/edituser" element={<EditUser />} />
+
       </Routes>
     </BrowserRouter>
   );

@@ -6,7 +6,7 @@ import useUserStore from "../../../lib/userStore";
 function UserContent(props) {
   const [reviews, setReviews] = useState([]);
   const [user, setUser] = useState({});
-  const { currentUser } = useUserStore();
+  const { currentUser, currentUsername } = useUserStore();
 
   useEffect(() => {
     async function retrieveUsersInfo() {
@@ -59,13 +59,13 @@ function UserContent(props) {
           </div>
         </div>
         <button
-          style={{ display: currentUser === user.userid ? "none" : "block" }}
+          style={{ display: currentUser === user[0]?.userid ? "none" : "block" }}
         >
           Follow
         </button>
         <button
           className="editUserButton"
-          style={{ display: !(currentUser === user.userid) ? "none" : "block" }}
+          style={{ display: !(currentUser === user[0]?.userid) ? "none" : "block" }}
         >
           Edit User
         </button>
