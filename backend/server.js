@@ -232,8 +232,8 @@ app.post("/postReview", async (req, res) => {
 app.post("/addUser", async (req, res) => {
   const data = req.body;
   const query = `
-  INSERT INTO users (userid, username, pfp)
-  VALUES ($1, $2, $3)
+  INSERT INTO users (userid, username, pfp, nopic)
+  VALUES ($1, $2, $3, $4)
   `;
 
   const user = [data.id, data.username, data.pfp];

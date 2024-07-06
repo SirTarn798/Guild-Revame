@@ -33,11 +33,13 @@ function EditUserPanel() {
 
     if (pfp.file) {
       setPfp(await upload(pfp.file));
+      
     }
 
     if (banner.file) {
       setBanner(await upload(banner.file));
     }
+
   };
 
   const handlePfp = (e) => {
