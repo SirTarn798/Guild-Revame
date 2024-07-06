@@ -2,10 +2,13 @@ import "./EditUserPanel.css";
 import { storage } from "../../../lib/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useState } from "react";
+import useUserStore from "../../../lib/userStore";
 
 function EditUserPanel() {
   const [pfpLink, setPfpLink] = useState("");
   const [bannerLink, setBannerLink] = useState("");
+
+  const { currentUser } = useUserStore();
 
   const [pfp, setPfp] = useState({
     file: null,
@@ -32,12 +35,37 @@ function EditUserPanel() {
     e.preventDefault();
 
     if (pfp.file) {
-      setPfp(await upload(pfp.file));
-      
+      const link = "http://localhost:3000/uploadPfp";
+      try {
+        setPfp(await upload(pfp.file));
+        const response = await fetch(link, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ link: pfp, userid: currentUser }),
+        });
+      } catch (err) {
+        console.log(err.message);
+        return;
+      }
     }
 
     if (banner.file) {
-      setBanner(await upload(banner.file));
+      const link = "http://localhost:3000/uploadBanner";
+      try {
+        setBanner(await upload(banner.file));
+        const response = await fetch(link, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ link: banner, userid: currentUser }),
+        });
+      } catch (err) {
+        console.log(err.message);
+        return;
+      }
     }
 
   };
