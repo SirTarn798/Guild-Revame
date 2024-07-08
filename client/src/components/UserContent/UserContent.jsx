@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function UserContent(props) {
   const [reviews, setReviews] = useState([]);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState([]);
   const { currentUser, currentUsername } = useUserStore();
 
   const navigate = useNavigate();
@@ -53,15 +53,15 @@ function UserContent(props) {
   return (
     <div className="userContent">
       <img
-        src={user[0].banner}
+        src={user[0]?.banner}
         alt="background image"
         className="backgroundImage"
       />
       <div className="userPageDetail">
         <div className="imgAndTextUser">
-          <img src={user[0].pfp} alt="profile picture" />
+          <img src={user[0]?.pfp} alt="profile picture" />
           <div className="userPageDetailText">
-            <h3>{user[0].username}</h3>
+            <h3>{user[0]?.username}</h3>
             <p>500 Followers 2 Following</p>
           </div>
         </div>

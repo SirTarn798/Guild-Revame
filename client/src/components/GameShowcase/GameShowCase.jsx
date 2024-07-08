@@ -10,18 +10,29 @@ function GameShowcase(props) {
   const [reviews, setReviews] = useState(null);
   const { currentUser } = useUserStore();
 
+  const [alreadyReview, setAlreadyReview] = useState(false);
+
+  const [recommendation, setRecommendation] = useState("neutral");
+
   const [reviewText, setReviewText] = useState("");
 
   let posted = false;
 
   const postReview = async (e) => {
+    let rec = false;
+    if (reviewText === "" || recommendation === "neutral") {
+      return;
+    }
+    else if(recommendation === "recommend") {
+      rec = true;
+    }
     const body = {
       id: uuidv4(),
       gameID: props.gameID,
       gamename: gameData[0].name,
       reviewerID: currentUser,
       reviewText: reviewText,
-      recommend: true,
+      recommend: rec,
       dateTime: new Date().toISOString(),
       like: 0,
     };
@@ -76,6 +87,12 @@ function GameShowcase(props) {
     retrieveGameData();
   }, [props.gameID]);
 
+  useEffect(() => {
+    setAlreadyReview(
+      reviews?.some((review) => review.reviewerid === currentUser)
+    );
+  }, [reviews]);
+
   if (isLoading) {
     return (
       <div className="searchGamePanelLoading">
@@ -113,9 +130,7 @@ function GameShowcase(props) {
       <div className="reviewSection">
         <form className="writeReview" onSubmit={postReview}>
           <textarea
-            disabled={
-              reviews.some((review) => review.reviewerid === currentUser)
-            }
+            disabled={alreadyReview}
             name="reviewText"
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
@@ -125,13 +140,35 @@ function GameShowcase(props) {
                 : "Write your review here..."
             }
           ></textarea>
-          <button
-            disabled={
-              reviews.some((review) => review.reviewerid === currentUser)
-            }
-          >
-            Post review
-          </button>
+          <div className="reviewTool">
+            <div
+              disabled={alreadyReview}
+              className={
+                alreadyReview
+                  ? "blockedRec"
+                  : "recommend" +
+                    (recommendation === "recommend" ? " clickedRec" : "")
+              }
+              onClick={() => setRecommendation("recommend")}
+            >
+              <img src="/recommend.png" />
+              Recommend
+            </div>
+            <div
+              disabled={alreadyReview}
+              className={
+                alreadyReview
+                  ? "blockedRec"
+                  : "notRecommend" +
+                    (recommendation === "notRecommend" ? " clickedNotRec" : "")
+              }
+              onClick={() => setRecommendation("notRecommend")}
+            >
+              <img src="/notRecommend.png" />
+              Not Recommend
+            </div>
+            <button disabled={alreadyReview}>Post review</button>
+          </div>
         </form>
         {reviews.map((review) => {
           return <FullGameReview review={review} key={review.id} />;

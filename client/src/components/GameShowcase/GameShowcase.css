@@ -1,134 +1,179 @@
 .gameShowcaseContainer {
-    flex: 3;
-    display: flex;
-    flex-direction: column;
-    background-color: rgba(46, 45, 45, 0.795);
-    overflow: scroll;
-    overflow-x: hidden;
-    align-items: center;
-    color: rgb(211, 210, 210);
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(46, 45, 45, 0.795);
+  overflow: scroll;
+  overflow-x: hidden;
+  align-items: center;
+  color: rgb(211, 210, 210);
 }
 
 .fullGameDetail {
-    display: flex;
-    gap: 20px;
-    margin-top: 30px;
-    padding-left: 50px;
-    padding-right: 50px;
-    width: 100%;
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+  padding-left: 50px;
+  padding-right: 50px;
+  width: 100%;
 
-    img {
-        border-radius: 10px;
-        width: 264px;
-        height: 352px;
-    }
+  img {
+    border-radius: 10px;
+    width: 264px;
+    height: 352px;
+  }
 }
 
 .storylineAndRating {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
-    .rating {
-        font-size: smaller;
-    }
+  .rating {
+    font-size: smaller;
+  }
 }
 
 .aboveReviewsBar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 50px;
 }
 
 .reviewSection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 .reviewTextDetail {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 
-    .username {
-        font-weight: bolder;
-        font-size: larger;
-    }
-
+  .username {
+    font-weight: bolder;
+    font-size: larger;
+  }
 }
 
 .writeReview {
-    width: 80%;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  textarea {
+    padding: 15px;
+    background-color: transparent;
+    color: rgb(211, 210, 210);
+    font-size: 16px;
+    width: 100%;
+    height: 150px;
+    border-radius: 10px;
+    resize: none;
+  }
+  .reviewTool {
+    width: 100%;
+    gap: 20px;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
-    textarea {
-        padding: 15px;
-        background-color: transparent;
-        color: rgb(211, 210, 210);
-        font-size: 16px;
-        width: 100%;
-        height: 150px;
-        border-radius: 10px;
-        resize: none;
-    }
+    justify-content: flex-end;
 
     button {
-        align-self: self-end;
-        height: 50px;
-        border-radius: 10px;
-        padding-left: 5px;
-        padding-right: 5px;
+      height: 50px;
+      border-radius: 10px;
+      padding-left: 5px;
+      padding-right: 5px;
     }
+
+    .recommend,
+    .notRecommend,
+    .blockedRec {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      img {
+        width: 30px;
+        height: 30px;
+      }
+      p {
+        color: white;
+      }
+      padding: 5px;
+      border-radius: 10px;
+      transition: 500ms;
+      cursor: pointer;
+    }
+
+    .recommend:hover {
+      background-color: rgba(172, 255, 47, 0.647);
+    }
+
+    .notRecommend:hover {
+      background-color: rgba(197, 68, 68, 0.719);
+    }
+  }
+}
+
+.blockedRec {
+    background-color: rgba(15, 15, 15, 0.685);
+    cursor: no-drop !important;
+}
+
+.clickedRec {
+  background-color: rgba(172, 255, 47, 0.647);
+}
+
+.clickedNotRec {
+  background-color: rgba(197, 68, 68, 0.719);
 }
 
 .dropdownIndicator {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .dropdown {
-    display: inline-block;
+  display: inline-block;
 }
 
 .dropdown button {
-    background-color: hsl(0, 0%, 80%);
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
+  background-color: hsl(0, 0%, 80%);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
 }
 
 .dropdown a {
-    display: block;
-    color: black;
-    text-decoration: none;
-    padding: 10px 15px;
+  display: block;
+  color: black;
+  text-decoration: none;
+  padding: 10px 15px;
 }
 
 .dropdown .content {
-    display: none;
-    position: absolute;
-    background-color: hsl(0, 0%, 95%);
-    min-width: 100px;
-    box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.8);
+  display: none;
+  position: absolute;
+  background-color: hsl(0, 0%, 95%);
+  min-width: 100px;
+  box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.8);
 }
 
 .dropdown:hover .content {
-    display: block;
+  display: block;
 }
 
 .dropdown:hover button {
-    background-color: hsl(0, 0%, 70%);
+  background-color: hsl(0, 0%, 70%);
 }
 
 .dropdown a:hover {
-    background-color: hsl(0, 0%, 90%);
+  background-color: hsl(0, 0%, 90%);
 }

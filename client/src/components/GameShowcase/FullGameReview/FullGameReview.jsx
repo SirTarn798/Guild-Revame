@@ -16,7 +16,9 @@ function FullGameReview(props) {
         <div className="userDetail">
           <img src={props.review.pfp} alt="profile" />
           <div className="reviewTextDetail">
-            <p  className="username" onClick={clickUserDetailHandle}>{props.review.username}</p>
+            <p className="username" onClick={clickUserDetailHandle}>
+              {props.review.username}
+            </p>
             <p
               onClick={clickGameNameHandle}
               style={{ display: props.from ? "block" : "none" }}
@@ -26,14 +28,18 @@ function FullGameReview(props) {
             </p>
           </div>
         </div>
-        <div className="recommendation">
+        <div
+          className={
+            props.review.recommend ? "recommend" : "notRecommend"
+          }
+        >
           <img
             src={
               props.review.recommend ? "/recommend.png" : "/notRecommend.png"
             }
             alt={props.review.recommend ? "recommend" : "notRecommend"}
           />
-          <p>recommend</p>
+          <p>{props.review.recommend ? "Recommend" : "Not Recommend"}</p>
         </div>
       </div>
       <p>{props.review.reviewtext}</p>
