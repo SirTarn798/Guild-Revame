@@ -2,11 +2,18 @@ import "./UserContent.css";
 import FullGameReview from "../GameShowcase/FullGameReview/FullGameReview";
 import { useEffect, useState } from "react";
 import useUserStore from "../../../lib/userStore";
+import { useNavigate } from "react-router-dom";
 
 function UserContent(props) {
   const [reviews, setReviews] = useState([]);
   const [user, setUser] = useState({});
   const { currentUser, currentUsername } = useUserStore();
+
+  const navigate = useNavigate();
+
+  const handleEditUser = () => {
+    navigate("/edituser");
+  };
 
   useEffect(() => {
     async function retrieveUsersInfo() {
@@ -46,26 +53,31 @@ function UserContent(props) {
   return (
     <div className="userContent">
       <img
-        src="/nopic.png"
+        src={user[0].banner}
         alt="background image"
         className="backgroundImage"
       />
       <div className="userPageDetail">
         <div className="imgAndTextUser">
-          <img src="/user.png" alt="profile picture" />
+          <img src={user[0].pfp} alt="profile picture" />
           <div className="userPageDetailText">
-            <h3>Username</h3>
+            <h3>{user[0].username}</h3>
             <p>500 Followers 2 Following</p>
           </div>
         </div>
         <button
-          style={{ display: currentUser === user[0]?.userid ? "none" : "block" }}
+          style={{
+            display: currentUser === user[0]?.userid ? "none" : "block",
+          }}
         >
           Follow
         </button>
         <button
           className="editUserButton"
-          style={{ display: !(currentUser === user[0]?.userid) ? "none" : "block" }}
+          style={{
+            display: !(currentUser === user[0]?.userid) ? "none" : "block",
+          }}
+          onClick={handleEditUser}
         >
           Edit User
         </button>

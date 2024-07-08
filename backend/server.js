@@ -335,3 +335,23 @@ app.post("/getSavedReviews", async (req, res) => {
   }
   res.json(data);
 });
+
+app.post("/uploadPfp", async (req,res) => {
+  const data = req.body;
+  const query = `UPDATE users SET pfp = '${data.link}' WHERE userid = '${data.userid}'`;
+  try {
+    const response = await db.query(query)
+  } catch(err) {
+    console.log(err.message);
+  }
+})
+
+app.post("/uploadBanner", async (req,res) => {
+  const data = req.body;
+  const query = `UPDATE users SET banner = '${data.link}' WHERE userid = '${data.userid}'`;
+  try {
+    const response = await db.query(query)
+  } catch(err) {
+    console.log(err.message);
+  }
+})

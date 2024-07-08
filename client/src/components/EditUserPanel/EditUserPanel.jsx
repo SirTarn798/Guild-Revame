@@ -5,8 +5,6 @@ import { useState } from "react";
 import useUserStore from "../../../lib/userStore";
 
 function EditUserPanel() {
-  const [pfpLink, setPfpLink] = useState("");
-  const [bannerLink, setBannerLink] = useState("");
 
   const { currentUser } = useUserStore();
 
@@ -37,13 +35,13 @@ function EditUserPanel() {
     if (pfp.file) {
       const link = "http://localhost:3000/uploadPfp";
       try {
-        setPfp(await upload(pfp.file));
+        const uploadPfp = await upload(pfp.file);
         const response = await fetch(link, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ link: pfp, userid: currentUser }),
+          body: JSON.stringify({ link: uploadPfp, userid: currentUser }),
         });
       } catch (err) {
         console.log(err.message);
@@ -54,13 +52,14 @@ function EditUserPanel() {
     if (banner.file) {
       const link = "http://localhost:3000/uploadBanner";
       try {
-        setBanner(await upload(banner.file));
+        const uploadBanner = await upload(banner.file);
+        console.log(uploadBanner);
         const response = await fetch(link, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ link: banner, userid: currentUser }),
+          body: JSON.stringify({ link: uploadBanner, userid: currentUser }),
         });
       } catch (err) {
         console.log(err.message);
@@ -98,7 +97,7 @@ function EditUserPanel() {
         </div>
         <div className="editUserElement">
           <p>Profile Picture</p>
-          <img src={"/user.png"} />
+          <img src={pfp.url ? pfp.url : "/user.png"} />
           <label htmlFor="choosePfp">Upload an Image</label>
           <input
             type="file"
@@ -109,11 +108,11 @@ function EditUserPanel() {
         </div>
         <div className="editUserElement">
           <p>Profile Banner</p>
-          <img src={"/user.png"} />
-          <label htmlFor="choosePfp">Upload an Image</label>
+          <img src={banner.url ? banner.url : "/user.png"} />
+          <label htmlFor="chooseBanner">Upload an Image</label>
           <input
             type="file"
-            id="choosePfp"
+            id="chooseBanner"
             style={{ display: "none" }}
             onChange={handleBanner}
           ></input>
