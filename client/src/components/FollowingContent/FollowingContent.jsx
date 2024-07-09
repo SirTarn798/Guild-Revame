@@ -53,7 +53,6 @@ function FollowingContent() {
     <div className="followingContentContainer">
       <h1>Reviews from accounts you followed</h1>
       {reviews.map((review) => {
-        console.log(review);
         return <FullGameReview review={review} key={review.id} from="user" />;
       })}
     </div>
