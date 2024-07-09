@@ -14,6 +14,24 @@ function UserContent(props) {
   const handleEditUser = () => {
     navigate("/edituser");
   };
+ 
+  const handleFollow = async () => {
+    const link = "http://localhost:3000/follow";
+    try {
+      const response = await fetch(link, {
+        method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            followerID: currentUser,
+            followingID: user[0]?.userid,
+          }),
+      })
+    } catch(err) {
+      console.log(err.message);
+    }
+  }
 
   useEffect(() => {
     async function retrieveUsersInfo() {
@@ -69,6 +87,7 @@ function UserContent(props) {
           style={{
             display: currentUser === user[0]?.userid ? "none" : "block",
           }}
+          onClick={handleFollow}
         >
           Follow
         </button>

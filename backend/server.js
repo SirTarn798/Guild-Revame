@@ -232,11 +232,11 @@ app.post("/postReview", async (req, res) => {
 app.post("/addUser", async (req, res) => {
   const data = req.body;
   const query = `
-  INSERT INTO users (userid, username, pfp, nopic)
+  INSERT INTO users (userid, username, pfp, banner)
   VALUES ($1, $2, $3, $4)
   `;
 
-  const user = [data.id, data.username, data.pfp];
+  const user = [data.id, data.username, data.pfp, data.banner];
   try {
     await db.query(query, user);
   } catch (err) {
@@ -353,5 +353,18 @@ app.post("/uploadBanner", async (req,res) => {
     const response = await db.query(query)
   } catch(err) {
     console.log(err.message);
+  }
+})
+
+app.post("/follow", async (req,res) => {
+  const followerID = req.body.followerID;
+  const followingID = req.body.followingID;
+
+  const query = `INSERT INTO FOLLOW VALUES ('${followerID}', '${followingID}')`;
+  try {
+    await db.query(query);
+    res.send("success");
+  } catch(err) {
+    console.log(err.message)
   }
 })
