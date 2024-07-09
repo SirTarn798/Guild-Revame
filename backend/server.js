@@ -176,24 +176,26 @@ app.post("/getReview", async (req, res) => {
     res.json(data);
   } else if (req.body.requestFromUsername) {
     let data;
-    const username = req.body.requestFromUsername;
+    const user = req.body.requestFromUsername;
+    const userid = req.body.userid
+    console.log(user)
     const query = `
     SELECT reviews.*, users.*,
            EXISTS (
                SELECT 1
                FROM likes
-               WHERE likes.userid = users.userid
+               WHERE likes.userid = '${userid}'
                AND likes.reviewid = reviews.reviewid
            ) AS hasLiked,
           EXISTS (
               SELECT 1 
               FROM saved 
-              WHERE saved.userid = users.userid 
+              WHERE saved.userid = '${userid}'
               AND saved.reviewid = reviews.reviewid
            ) AS hasSaved
     FROM reviews
     JOIN users ON users.userid = reviews.reviewerid
-    WHERE users.username = '${username}';
+    WHERE users.username = '${user[0].username}';
     `;
     try {
       const response = await db.query(query);
@@ -312,18 +314,18 @@ app.post("/getSavedReviews", async (req, res) => {
    EXISTS (
                SELECT 1
                FROM likes
-               WHERE likes.userid = users.userid
+               WHERE likes.userid = '${userid}'
                AND likes.reviewid = reviews.reviewid
            ) AS hasLiked,
           EXISTS (
               SELECT 1 
               FROM saved 
-              WHERE saved.userid = users.userid 
+              WHERE saved.userid = '${userid}'
               AND saved.reviewid = reviews.reviewid
            ) AS hasSaved 
   FROM saved 
   JOIN reviews ON reviews.reviewid = saved.reviewid
-  JOIN users ON users.userid = saved.userid
+  JOIN users ON users.userid = reviews.reviewerid
   WHERE saved.userid = '${userid}'
   `;
   let data;
@@ -336,27 +338,27 @@ app.post("/getSavedReviews", async (req, res) => {
   res.json(data);
 });
 
-app.post("/uploadPfp", async (req,res) => {
+app.post("/uploadPfp", async (req, res) => {
   const data = req.body;
   const query = `UPDATE users SET pfp = '${data.link}' WHERE userid = '${data.userid}'`;
   try {
-    const response = await db.query(query)
-  } catch(err) {
+    const response = await db.query(query);
+  } catch (err) {
     console.log(err.message);
   }
-})
+});
 
-app.post("/uploadBanner", async (req,res) => {
+app.post("/uploadBanner", async (req, res) => {
   const data = req.body;
   const query = `UPDATE users SET banner = '${data.link}' WHERE userid = '${data.userid}'`;
   try {
-    const response = await db.query(query)
-  } catch(err) {
+    const response = await db.query(query);
+  } catch (err) {
     console.log(err.message);
   }
-})
+});
 
-app.post("/follow", async (req,res) => {
+app.post("/follow", async (req, res) => {
   const followerID = req.body.followerID;
   const followingID = req.body.followingID;
 
@@ -364,7 +366,50 @@ app.post("/follow", async (req,res) => {
   try {
     await db.query(query);
     res.send("success");
-  } catch(err) {
-    console.log(err.message)
+  } catch (err) {
+    console.log(err.message);
   }
-})
+});
+
+app.post("/getFollowing", async (req, res) => {
+  const query = `
+    SELECT users.* FROM follow
+    JOIN users ON users.userid = follow.followingid
+    WHERE follow.followerid = '${req.body.userid}'
+  `;
+  try {
+    const response = await db.query(query);
+    res.json(response.rows);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
+app.post("/getFollowReview", async (req, res) => {
+  const userid = req.body.userid;
+  const userids = req.body.userids;
+  const query = `
+  SELECT reviews.*, users.*,
+   EXISTS (
+            SELECT 1
+            FROM likes
+            WHERE likes.userid = '${userid}'
+            AND likes.reviewid = reviews.reviewid
+           ) AS hasLiked,
+          EXISTS (
+            SELECT 1 
+            FROM saved 
+            WHERE saved.userid = '${userid}'
+            AND saved.reviewid = reviews.reviewid
+           ) AS hasSaved 
+  FROM reviews
+  JOIN users ON users.userid = reviews.reviewerid
+  WHERE reviews.reviewerid IN (${userids});
+  `;
+  let data;
+  try {
+    const response = await db.query(query);
+    data = response.rows;
+  } catch (err) {}
+  res.json(data);
+});

@@ -14,31 +14,30 @@ function UserContent(props) {
   const handleEditUser = () => {
     navigate("/edituser");
   };
- 
+
   const handleFollow = async () => {
     const link = "http://localhost:3000/follow";
     try {
       const response = await fetch(link, {
         method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            followerID: currentUser,
-            followingID: user[0]?.userid,
-          }),
-      })
-    } catch(err) {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          followerID: currentUser,
+          followingID: user[0]?.userid,
+        }),
+      });
+    } catch (err) {
       console.log(err.message);
     }
-  }
+  };
 
   useEffect(() => {
     async function retrieveUsersInfo() {
-      const linkReview = "http://localhost:3000/getReview";
       const linkUser = "http://localhost:3000/getUser";
       try {
-        let response = await fetch(linkReview, {
+        let response = await fetch(linkUser, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -48,18 +47,6 @@ function UserContent(props) {
           }),
         });
         let data = await response.json();
-        setReviews(data);
-
-        response = await fetch(linkUser, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            requestFromUsername: props.username,
-          }),
-        });
-        data = await response.json();
         setUser(data);
       } catch (err) {
         console.log(err.message);
@@ -67,6 +54,31 @@ function UserContent(props) {
     }
     retrieveUsersInfo();
   }, [props.username]);
+
+  useEffect(() => {
+    const linkReview = "http://localhost:3000/getReview";
+    const getReview = async () => {
+      try {
+        if(user[0]) {
+        const response = await fetch(linkReview, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            requestFromUsername: user,
+            userid: currentUser
+          }),
+        });
+        const data = await response.json();
+        setReviews(data);
+      }
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    getReview();
+  }, [user]);
 
   return (
     <div className="userContent">

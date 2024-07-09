@@ -5,9 +5,9 @@
   background-color: rgba(46, 45, 45, 0.795);
   overflow: scroll;
   overflow-x: hidden;
+  color: rgb(211, 210, 210);
 
   h1 {
-    color: rgb(211, 210, 210);
     padding: 20px;
   }
 }

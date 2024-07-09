@@ -19,8 +19,8 @@ function Saved(props) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userid: currentUser }),
         });
-        const res = await response.json();
-        setData(res);
+        const data = await response.json();
+        setData(data);
       } catch (err) {
         console.log(err.message);
       }

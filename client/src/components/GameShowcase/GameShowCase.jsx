@@ -78,6 +78,7 @@ function GameShowcase(props) {
           }),
         });
         const data = await response.json();
+        console.log(data);
         setReviews(data);
       } catch (err) {
         console.log(err.message);
