@@ -178,7 +178,6 @@ app.post("/getReview", async (req, res) => {
     let data;
     const user = req.body.requestFromUsername;
     const userid = req.body.userid
-    console.log(user)
     const query = `
     SELECT reviews.*, users.*,
            EXISTS (
