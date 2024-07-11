@@ -3,11 +3,16 @@ import "./GameShowcase.css";
 import useUserStore from "../../../lib/userStore";
 import { v4 as uuidv4 } from "uuid";
 import FullGameReview from "./FullGameReview/FullGameReview";
+import { useLocation } from "react-router-dom";
 
 function GameShowcase(props) {
+
+  let location = useLocation();
+  let query = new URLSearchParams(location.search);
+
   const [gameData, setGameData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [reviews, setReviews] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const { currentUser } = useUserStore();
 
   const [alreadyReview, setAlreadyReview] = useState(false);
@@ -15,15 +20,13 @@ function GameShowcase(props) {
   const [recommendation, setRecommendation] = useState("neutral");
 
   const [reviewText, setReviewText] = useState("");
-
-  let posted = false;
+  const [sort, setSort] = useState(query.get('sort'));
 
   const postReview = async (e) => {
     let rec = false;
     if (reviewText === "" || recommendation === "neutral") {
       return;
-    }
-    else if(recommendation === "recommend") {
+    } else if (recommendation === "recommend") {
       rec = true;
     }
     const body = {
@@ -78,7 +81,11 @@ function GameShowcase(props) {
           }),
         });
         const data = await response.json();
-        console.log(data);
+        if(sort === "recent") {
+        data?.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+        } else if(sort === "popular") {
+          data?.sort((a, b) => new Date(b.like) - new Date(a.like));
+        }
         setReviews(data);
       } catch (err) {
         console.log(err.message);
@@ -123,8 +130,8 @@ function GameShowcase(props) {
             <button>Recent</button>
           </div>
           <div className="content">
-            <a href="">Recent</a>
-            <a href="">Popular</a>
+            <a href={`/game/${props.gameID}?sort=recent`}>Recent</a>
+            <a href={`/game/${props.gameID}?sort=popular`}>Popular</a>
           </div>
         </div>
       </div>

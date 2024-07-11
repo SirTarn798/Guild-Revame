@@ -2,9 +2,14 @@ import "./UserContent.css";
 import FullGameReview from "../GameShowcase/FullGameReview/FullGameReview";
 import { useEffect, useState } from "react";
 import useUserStore from "../../../lib/userStore";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function UserContent(props) {
+
+  let location = useLocation();
+  let query = new URLSearchParams(location.search);
+  const [sort, setSort] = useState(query.get('sort'));
+
   const [reviews, setReviews] = useState([]);
   const [user, setUser] = useState([]);
   const { currentUser, currentUsername } = useUserStore();
@@ -32,7 +37,7 @@ function UserContent(props) {
       });
       let data = await response.text();
       console.log(data);
-      if(data === "success") {
+      if (data === "success") {
         setHasFollowed(!hasFollowed);
       }
     } catch (err) {
@@ -78,6 +83,11 @@ function UserContent(props) {
             }),
           });
           const data = await response.json();
+          if (sort === "recent") {
+            data?.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+          } else if (sort === "popular") {
+            data?.sort((a, b) => new Date(b.like) - new Date(a.like));
+          }
           setReviews(data);
         }
       } catch (err) {
@@ -126,7 +136,8 @@ function UserContent(props) {
         </div>
         <button
           style={{
-            display: ((currentUser != user[0]?.userid) && !hasFollowed) ? "block" : "none",
+            display:
+              currentUser != user[0]?.userid && !hasFollowed ? "block" : "none",
           }}
           onClick={handleFollow}
         >
@@ -134,7 +145,8 @@ function UserContent(props) {
         </button>
         <button
           style={{
-            display: ((currentUser != user[0]?.userid) && hasFollowed) ? "block" : "none",
+            display:
+              currentUser != user[0]?.userid && hasFollowed ? "block" : "none",
           }}
           onClick={handleFollow}
         >
@@ -143,7 +155,7 @@ function UserContent(props) {
         <button
           className="editUserButton"
           style={{
-            display: (currentUser === user[0]?.userid) ? "block" : "none",
+            display: currentUser === user[0]?.userid ? "block" : "none",
           }}
           onClick={handleEditUser}
         >
@@ -159,8 +171,8 @@ function UserContent(props) {
               <button>Recent</button>
             </div>
             <div className="content">
-              <a href="">Recent</a>
-              <a href="">Popular</a>
+              <a href={`/user/${user[0]?.username}?sort=recent`}>Recent</a>
+              <a href={`/user/${user[0]?.username}?sort=popular`}>Popular</a>
             </div>
           </div>
         </div>
