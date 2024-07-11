@@ -5,7 +5,6 @@ import { useState } from "react";
 import useUserStore from "../../../lib/userStore";
 
 function EditUserPanel() {
-
   const { currentUser } = useUserStore();
 
   const [pfp, setPfp] = useState({
@@ -29,9 +28,8 @@ function EditUserPanel() {
       console.log(err);
     }
   }
-  const handleSubmit = async (e) => {
+  const handleUploadPfp = async (e) => {
     e.preventDefault();
-
     if (pfp.file) {
       const link = "http://localhost:3000/uploadPfp";
       try {
@@ -45,15 +43,15 @@ function EditUserPanel() {
         });
       } catch (err) {
         console.log(err.message);
-        return;
       }
     }
-
+  };
+  const handleUploadBanner = async (e) => {
+    e.preventDefault();
     if (banner.file) {
       const link = "http://localhost:3000/uploadBanner";
       try {
         const uploadBanner = await upload(banner.file);
-        console.log(uploadBanner);
         const response = await fetch(link, {
           method: "POST",
           headers: {
@@ -63,10 +61,8 @@ function EditUserPanel() {
         });
       } catch (err) {
         console.log(err.message);
-        return;
       }
     }
-
   };
 
   const handlePfp = (e) => {
@@ -90,7 +86,7 @@ function EditUserPanel() {
   return (
     <div className="editUserPanel">
       <h1>Edit User</h1>
-      <form className="editUserElementContainer" onSubmit={handleSubmit}>
+      <form className="editUserElementContainer">
         <div className="editUserElement">
           <p>Username</p>
           <input type="text" name="username" />
@@ -117,7 +113,8 @@ function EditUserPanel() {
             onChange={handleBanner}
           ></input>
         </div>
-        <button>Submit</button>
+        <button onClick={handleUploadPfp}>Apply Change to Profile Picture</button>
+        <button onClick={handleUploadBanner}>Apply Change to Profile Banner</button>
       </form>
     </div>
   );
