@@ -177,7 +177,7 @@ app.post("/getReview", async (req, res) => {
   } else if (req.body.requestFromUsername) {
     let data;
     const user = req.body.requestFromUsername;
-    const userid = req.body.userid
+    const userid = req.body.userid;
     const query = `
     SELECT reviews.*, users.*,
            EXISTS (
@@ -230,21 +230,6 @@ app.post("/postReview", async (req, res) => {
   }
 });
 
-app.post("/addUser", async (req, res) => {
-  const data = req.body;
-  const query = `
-  INSERT INTO users (userid, username, pfp, banner)
-  VALUES ($1, $2, $3, $4)
-  `;
-
-  const user = [data.id, data.username, data.pfp, data.banner];
-  try {
-    await db.query(query, user);
-  } catch (err) {
-    console.log(err.message);
-  }
-});
-
 app.post("/handleLike", async (req, res) => {
   let query = "";
   let msg;
@@ -266,6 +251,21 @@ app.post("/handleLike", async (req, res) => {
     console.log(err.message);
   }
   res.send(msg);
+});
+
+app.post("/addUser", async (req, res) => {
+  const data = req.body;
+  const query = `
+  INSERT INTO users (userid, username, pfp, banner)
+  VALUES ($1, $2, $3, $4)
+  `;
+
+  const user = [data.id, data.username, data.pfp, data.banner];
+  try {
+    await db.query(query, user);
+  } catch (err) {
+    console.log(err.message);
+  }
 });
 
 app.post("/getUser", async (req, res) => {
@@ -360,8 +360,10 @@ app.post("/uploadBanner", async (req, res) => {
 app.post("/follow", async (req, res) => {
   const followerID = req.body.followerID;
   const followingID = req.body.followingID;
-
-  const query = `INSERT INTO FOLLOW VALUES ('${followerID}', '${followingID}')`;
+  const follow = req.body.follow;
+  const query = follow
+    ? `DELETE FROM "follow" WHERE followerID = '${followerID}' AND followingID = '${followingID}'`
+    : `INSERT INTO FOLLOW VALUES ('${followerID}', '${followingID}')`;
   try {
     await db.query(query);
     res.send("success");
@@ -410,5 +412,21 @@ app.post("/getFollowReview", async (req, res) => {
     const response = await db.query(query);
     data = response.rows;
   } catch (err) {}
+  res.json(data);
+});
+
+app.post("/checkFollow", async (req, res) => {
+  const followerID = req.body.followerID;
+  const followingID = req.body.followingID;
+  const query = `
+    SELECT EXISTS ( SELECT 1 FROM FOLLOW WHERE followerID = '${followerID}' AND followingID = '${followingID}' ) AS HASFOLLOWED;
+  `;
+  let data;
+  try {
+    const response = await db.query(query);
+    data = response.rows;
+  } catch (err) {
+    console.log(err.message);
+  }
   res.json(data);
 });

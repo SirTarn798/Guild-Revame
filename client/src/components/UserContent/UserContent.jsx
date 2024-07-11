@@ -8,6 +8,7 @@ function UserContent(props) {
   const [reviews, setReviews] = useState([]);
   const [user, setUser] = useState([]);
   const { currentUser, currentUsername } = useUserStore();
+  const [hasFollowed, setHasFollowed] = useState(false);
 
   const navigate = useNavigate();
 
@@ -26,8 +27,14 @@ function UserContent(props) {
         body: JSON.stringify({
           followerID: currentUser,
           followingID: user[0]?.userid,
+          follow: hasFollowed,
         }),
       });
+      let data = await response.text();
+      console.log(data);
+      if(data === "success") {
+        setHasFollowed(!hasFollowed);
+      }
     } catch (err) {
       console.log(err.message);
     }
@@ -56,28 +63,50 @@ function UserContent(props) {
   }, [props.username]);
 
   useEffect(() => {
-    const linkReview = "http://localhost:3000/getReview";
     const getReview = async () => {
+      const linkReview = "http://localhost:3000/getReview";
       try {
-        if(user[0]) {
-        const response = await fetch(linkReview, {
+        if (user[0]) {
+          const response = await fetch(linkReview, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              requestFromUsername: user,
+              userid: currentUser,
+            }),
+          });
+          const data = await response.json();
+          setReviews(data);
+        }
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+
+    const checkFollow = async () => {
+      const link = "http://localhost:3000/checkFollow";
+      try {
+        const response = await fetch(link, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            requestFromUsername: user,
-            userid: currentUser
+            followerID: currentUser,
+            followingID: user[0]?.userid,
           }),
         });
-        const data = await response.json();
-        setReviews(data);
-      }
+        let data = await response.json();
+        setHasFollowed(data[0]?.hasfollowed);
       } catch (err) {
         console.log(err.message);
       }
     };
+
     getReview();
+    checkFollow();
   }, [user]);
 
   return (
@@ -97,16 +126,24 @@ function UserContent(props) {
         </div>
         <button
           style={{
-            display: currentUser === user[0]?.userid ? "none" : "block",
+            display: ((currentUser != user[0]?.userid) && !hasFollowed) ? "block" : "none",
           }}
           onClick={handleFollow}
         >
           Follow
         </button>
         <button
+          style={{
+            display: ((currentUser != user[0]?.userid) && hasFollowed) ? "block" : "none",
+          }}
+          onClick={handleFollow}
+        >
+          Unfollow
+        </button>
+        <button
           className="editUserButton"
           style={{
-            display: !(currentUser === user[0]?.userid) ? "none" : "block",
+            display: (currentUser === user[0]?.userid) ? "block" : "none",
           }}
           onClick={handleEditUser}
         >
