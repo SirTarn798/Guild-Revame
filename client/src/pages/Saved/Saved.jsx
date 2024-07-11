@@ -3,12 +3,20 @@ import Navigator from "../../components/Navigator/Navigator";
 import TopCurators from "../../components/TopCurators/TopCurators";
 import { useEffect, useState } from "react";
 import useUserStore from "../../../lib/userStore";
-import { json } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 import FullGameReview from "../../components/GameShowcase/FullGameReview/FullGameReview";
 
 function Saved(props) {
   const { currentUser } = useUserStore();
   const [data, setData] = useState([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/login");
+    }
+  }, [currentUser, navigate]);
 
   useEffect(() => {
     async function getSavedReivews() {
