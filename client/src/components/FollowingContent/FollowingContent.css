@@ -6,7 +6,7 @@
   overflow: scroll;
   overflow-x: hidden;
   color: rgb(211, 210, 210);
-
+  align-items: center;
   h1 {
     padding: 20px;
   }

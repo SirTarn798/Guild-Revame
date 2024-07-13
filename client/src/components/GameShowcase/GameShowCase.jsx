@@ -68,7 +68,7 @@ function GameShowcase(props) {
       }
     }
     async function retrieveReviews() {
-      const link = "http://localhost:3000/getReview";
+      const link = "http://localhost:3000/getReviewFromGameID";
       try {
         const response = await fetch(link, {
           method: "POST",

@@ -69,7 +69,7 @@ function UserContent(props) {
 
   useEffect(() => {
     const getReview = async () => {
-      const linkReview = "http://localhost:3000/getReview";
+      const linkReview = "http://localhost:3000/getReviewFromUsername";
       try {
         if (user[0]) {
           const response = await fetch(linkReview, {

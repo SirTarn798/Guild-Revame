@@ -144,7 +144,7 @@ app.get("/searchGameID/:gameID", async (req, res) => {
   }
 });
 
-app.post("/getReview", async (req, res) => {
+app.post("/getReviewFromGameID", async (req, res) => {
   if (req.body.requestFromGameID) {
     let data;
     const gameID = req.body.requestFromGameID;
@@ -174,7 +174,11 @@ app.post("/getReview", async (req, res) => {
       console.log(err.message);
     }
     res.json(data);
-  } else if (req.body.requestFromUsername) {
+  }
+});
+
+app.post("/getReviewFromUsername", async (req, res) => {
+  if (req.body.requestFromUsername) {
     let data;
     const user = req.body.requestFromUsername;
     const userid = req.body.userid;
@@ -442,7 +446,7 @@ app.post("/getReviewFromID", async (req, res) => {
     const response = await db.query(query);
     data = response.rows;
     res.json(data);
-  } catch(err) {
+  } catch (err) {
     console.log(err.message);
   }
-})
+});
