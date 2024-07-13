@@ -12,6 +12,9 @@ function FullGameReview(props) {
   const clickGameNameHandle = () => {
     navigate(`/game/${props.review.gameid}`);
   };
+  const clickReviewHandle = () => {
+    navigate(`/review/${props.review.reviewid}`);
+  }
   return (
     <div className="fullGameReview">
       <div className="topReview">
@@ -44,12 +47,13 @@ function FullGameReview(props) {
           <p>{props.review.recommend ? "Recommend" : "Not Recommend"}</p>
         </div>
       </div>
-      <p>{props.review.reviewtext}</p>
+      <p onClick={clickReviewHandle} className="fullReviewContent">{props.review.reviewtext}</p>
       <InteractionTab
         reviewid={review.reviewid}
         userid={review.userid}
         hasliked={review.hasliked}
         hassaved={review.hassaved}
+        like={review.like}
       />
     </div>
   );

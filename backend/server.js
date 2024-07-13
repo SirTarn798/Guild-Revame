@@ -206,6 +206,66 @@ app.post("/getReview", async (req, res) => {
   }
 });
 
+app.post("/getSavedReviews", async (req, res) => {
+  const userid = req.body.userid;
+  const query = `
+  SELECT reviews.*, users.*,
+   EXISTS (
+               SELECT 1
+               FROM likes
+               WHERE likes.userid = '${userid}'
+               AND likes.reviewid = reviews.reviewid
+           ) AS hasLiked,
+          EXISTS (
+              SELECT 1 
+              FROM saved 
+              WHERE saved.userid = '${userid}'
+              AND saved.reviewid = reviews.reviewid
+           ) AS hasSaved 
+  FROM saved 
+  JOIN reviews ON reviews.reviewid = saved.reviewid
+  JOIN users ON users.userid = reviews.reviewerid
+  WHERE saved.userid = '${userid}'
+  `;
+  let data;
+  try {
+    const response = await db.query(query);
+    data = response.rows;
+  } catch (err) {
+    console.log(err);
+  }
+  res.json(data);
+});
+
+app.post("/getFollowReview", async (req, res) => {
+  const userid = req.body.userid;
+  const userids = req.body.userids;
+  const query = `
+  SELECT reviews.*, users.*,
+   EXISTS (
+            SELECT 1
+            FROM likes
+            WHERE likes.userid = '${userid}'
+            AND likes.reviewid = reviews.reviewid
+           ) AS hasLiked,
+          EXISTS (
+            SELECT 1 
+            FROM saved 
+            WHERE saved.userid = '${userid}'
+            AND saved.reviewid = reviews.reviewid
+           ) AS hasSaved 
+  FROM reviews
+  JOIN users ON users.userid = reviews.reviewerid
+  WHERE reviews.reviewerid IN (${userids});
+  `;
+  let data;
+  try {
+    const response = await db.query(query);
+    data = response.rows;
+  } catch (err) {}
+  res.json(data);
+});
+
 app.post("/postReview", async (req, res) => {
   const data = req.body;
   const query = `
@@ -253,6 +313,25 @@ app.post("/handleLike", async (req, res) => {
   res.send(msg);
 });
 
+app.post("/handleSaveReview", async (req, res) => {
+  const data = req.body.body;
+  let msg;
+  let query;
+  if (data.action === "saved") {
+    query = `INSERT INTO "saved" VALUES ('${data.userid}', '${data.reviewid}');`;
+    msg = "saved";
+  } else if (data.action === "unsaved") {
+    query = `DELETE FROM "saved" WHERE userid = '${data.userid}' AND reviewid = '${data.reviewid}';`;
+    msg = "unsaved";
+  }
+  try {
+    const response = await db.query(query);
+  } catch (err) {
+    console.log(err);
+  }
+  res.send(msg);
+});
+
 app.post("/addUser", async (req, res) => {
   const data = req.body;
   const query = `
@@ -285,56 +364,6 @@ app.post("/getUser", async (req, res) => {
     console.log(err.message);
   }
   res.json(user);
-});
-
-app.post("/handleSaveReview", async (req, res) => {
-  const data = req.body.body;
-  let msg;
-  let query;
-  if (data.action === "saved") {
-    query = `INSERT INTO "saved" VALUES ('${data.userid}', '${data.reviewid}');`;
-    msg = "saved";
-  } else if (data.action === "unsaved") {
-    query = `DELETE FROM "saved" WHERE userid = '${data.userid}' AND reviewid = '${data.reviewid}';`;
-    msg = "unsaved";
-  }
-  try {
-    const response = await db.query(query);
-  } catch (err) {
-    console.log(err);
-  }
-  res.send(msg);
-});
-
-app.post("/getSavedReviews", async (req, res) => {
-  const userid = req.body.userid;
-  const query = `
-  SELECT reviews.*, users.*,
-   EXISTS (
-               SELECT 1
-               FROM likes
-               WHERE likes.userid = '${userid}'
-               AND likes.reviewid = reviews.reviewid
-           ) AS hasLiked,
-          EXISTS (
-              SELECT 1 
-              FROM saved 
-              WHERE saved.userid = '${userid}'
-              AND saved.reviewid = reviews.reviewid
-           ) AS hasSaved 
-  FROM saved 
-  JOIN reviews ON reviews.reviewid = saved.reviewid
-  JOIN users ON users.userid = reviews.reviewerid
-  WHERE saved.userid = '${userid}'
-  `;
-  let data;
-  try {
-    const response = await db.query(query);
-    data = response.rows;
-  } catch (err) {
-    console.log(err);
-  }
-  res.json(data);
 });
 
 app.post("/uploadPfp", async (req, res) => {
@@ -386,35 +415,6 @@ app.post("/getFollowing", async (req, res) => {
   }
 });
 
-app.post("/getFollowReview", async (req, res) => {
-  const userid = req.body.userid;
-  const userids = req.body.userids;
-  const query = `
-  SELECT reviews.*, users.*,
-   EXISTS (
-            SELECT 1
-            FROM likes
-            WHERE likes.userid = '${userid}'
-            AND likes.reviewid = reviews.reviewid
-           ) AS hasLiked,
-          EXISTS (
-            SELECT 1 
-            FROM saved 
-            WHERE saved.userid = '${userid}'
-            AND saved.reviewid = reviews.reviewid
-           ) AS hasSaved 
-  FROM reviews
-  JOIN users ON users.userid = reviews.reviewerid
-  WHERE reviews.reviewerid IN (${userids});
-  `;
-  let data;
-  try {
-    const response = await db.query(query);
-    data = response.rows;
-  } catch (err) {}
-  res.json(data);
-});
-
 app.post("/checkFollow", async (req, res) => {
   const followerID = req.body.followerID;
   const followingID = req.body.followingID;
@@ -430,3 +430,19 @@ app.post("/checkFollow", async (req, res) => {
   }
   res.json(data);
 });
+
+app.post("/getReviewFromID", async (req, res) => {
+  const reviewID = req.body.reviewID;
+  const query = `
+    SELECT * FROM reviews JOIN users ON users.userid = reviews.reviewerid
+    WHERE reviews.reviewid = '${reviewID}'
+  `;
+  let data;
+  try {
+    const response = await db.query(query);
+    data = response.rows;
+    res.json(data);
+  } catch(err) {
+    console.log(err.message);
+  }
+})

@@ -78,7 +78,7 @@ function InteractionTab(props) {
         onClick={handleLike}
       >
         <img src="/like.png" />
-        <p>Like</p>
+        <p>Like {`${props.like}`}</p>
       </div>
       <div className="interaction shareInteraction">
         <img src="/share.png" />

@@ -28,8 +28,14 @@ function EditUserPanel() {
       console.log(err);
     }
   }
-  const handleUploadPfp = async (e) => {
+
+  const applyChanges = (e) => {
     e.preventDefault();
+    handleUploadBanner();
+    handleUploadPfp();
+  };
+
+  const handleUploadPfp = async () => {
     if (pfp.file) {
       const link = "http://localhost:3000/uploadPfp";
       try {
@@ -46,8 +52,7 @@ function EditUserPanel() {
       }
     }
   };
-  const handleUploadBanner = async (e) => {
-    e.preventDefault();
+  const handleUploadBanner = async () => {
     if (banner.file) {
       const link = "http://localhost:3000/uploadBanner";
       try {
@@ -113,8 +118,7 @@ function EditUserPanel() {
             onChange={handleBanner}
           ></input>
         </div>
-        <button onClick={handleUploadPfp}>Apply Change to Profile Picture</button>
-        <button onClick={handleUploadBanner}>Apply Change to Profile Banner</button>
+        <button onClick={applyChanges}>Apply Changs</button>
       </form>
     </div>
   );

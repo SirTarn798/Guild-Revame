@@ -11,6 +11,7 @@ import Game from "./pages/Game/Game";
 import User from "./pages/User/User";
 import EditUser from "./pages/EditUser/EditUser";
 import Saved from "./pages/Saved/Saved";
+import Review from "./pages/Review/Review";
 
 function App() {
   const { currentUser, isLoading, fetchUserInfo } = useUserStore();
@@ -24,7 +25,6 @@ function App() {
       unSub();
     };
   }, [fetchUserInfo]);
-
 
   if (isLoading) {
     return <div className="loading"></div>;
@@ -41,7 +41,7 @@ function App() {
         <Route path="/user/:username" element={<User />} />
         <Route path="/saved" element={<Saved />} />
         <Route path="/edituser" element={<EditUser />} />
-
+        <Route path="/review/:reviewID" element={<Review />} />
       </Routes>
     </BrowserRouter>
   );
