@@ -41,7 +41,7 @@
     align-items: center;
     gap: 15px;
 
-    img {
+    .profileImages {
         width: 75px;
         height: 75px;
     }
@@ -58,5 +58,10 @@
         border: none;
         border-radius: 5px;
     }
-}
 
+    .validateStatus {
+        width: 35px;
+        height: 35px;
+    }
+    
+}

@@ -20,6 +20,9 @@ const useUserStore = create((set) => ({
       console.log(err.message);
     }
   },
+  setNewUsername: (username) => {
+    return set({currentUsername : username})
+  }
 }));
 
 export default useUserStore;

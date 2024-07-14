@@ -450,3 +450,32 @@ app.post("/getReviewFromID", async (req, res) => {
     console.log(err.message);
   }
 });
+
+app.post("/checkUsernameExistence", async (req, res) => {
+  const username = req.body.username;
+  const query = `
+  SELECT EXISTS ( SELECT 1 FROM users WHERE users.username = '${username}') AS USERNAMEEXISTS;
+  `;
+  try {
+    const response = await db.query(query);
+    const data = response.rows[0];
+    res.json(data);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
+app.post("/changeUsername", async (req, res) => {
+  const username = req.body.username;
+  const userid = req.body.userid;
+
+  const query = `
+  UPDATE users SET username= '${username}' WHERE userid = '${userid}'
+  `;
+
+  try {
+    const response = db.query(query);
+  } catch (err) {
+    console.log(err.message);
+  }
+});

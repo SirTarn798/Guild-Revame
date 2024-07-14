@@ -5,7 +5,10 @@ import { useState } from "react";
 import useUserStore from "../../../lib/userStore";
 
 function EditUserPanel() {
-  const { currentUser } = useUserStore();
+  const { currentUser, setNewUsername } = useUserStore();
+
+  const [username, setUsername] = useState("");
+  const [validateUsername, setValidateUsername] = useState("neutral");
 
   const [pfp, setPfp] = useState({
     file: null,
@@ -29,11 +32,63 @@ function EditUserPanel() {
     }
   }
 
+  const checkUsernameValidation = async (e) => {
+    e.preventDefault();
+    if (username === "") {
+      alert("Please enter username");
+      return;
+    }
+    const link = "http://localhost:3000/checkUsernameExistence";
+    try {
+      const response = await fetch(link, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: username }),
+      });
+      const data = await response.json();
+      if (data.usernameexists) {
+        setValidateUsername("reject");
+      } else {
+        setValidateUsername("correct");
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   const applyChanges = (e) => {
     e.preventDefault();
+    handleChangeUsername();
     handleUploadBanner();
     handleUploadPfp();
+    alert("Changes have been applied.");
   };
+
+  async function handleChangeUsername() {
+    if (validateUsername === "reject") {
+      alert("That username already exists.");
+    } else if (username.trim().length > 0 && validateUsername === "neutral") {
+      alert("Please validate the username first.");
+      return false;
+    } else if (username.trim().length > 0 && validateUsername === "correct") {
+      const link = "http://localhost:3000/changeUsername";
+      try {
+        const response = await fetch(link, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userid: currentUser, username: username }),
+        });
+        setNewUsername(username);
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+    return true;
+  }
 
   const handleUploadPfp = async () => {
     if (pfp.file) {
@@ -94,11 +149,42 @@ function EditUserPanel() {
       <form className="editUserElementContainer">
         <div className="editUserElement">
           <p>Username</p>
-          <input type="text" name="username" />
+          <input
+            type="text"
+            name="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <button onClick={checkUsernameValidation}>Validate</button>
+          <img
+            className="validateStatus"
+            src="/correct.png"
+            alt="correct"
+            style={{
+              display:
+                validateUsername === "neutral" || validateUsername === "reject"
+                  ? "none"
+                  : "block",
+            }}
+          />
+          <img
+            className="validateStatus"
+            src="/reject.png"
+            alt="reject"
+            style={{
+              display:
+                validateUsername === "neutral" || validateUsername === "correct"
+                  ? "none"
+                  : "block",
+            }}
+          />
         </div>
         <div className="editUserElement">
           <p>Profile Picture</p>
-          <img src={pfp.url ? pfp.url : "/user.png"} />
+          <img
+            className="profileImages"
+            src={pfp.url ? pfp.url : "/user.png"}
+          />
           <label htmlFor="choosePfp">Upload an Image</label>
           <input
             type="file"
@@ -109,7 +195,10 @@ function EditUserPanel() {
         </div>
         <div className="editUserElement">
           <p>Profile Banner</p>
-          <img src={banner.url ? banner.url : "/user.png"} />
+          <img
+            className="profileImages"
+            src={banner.url ? banner.url : "/user.png"}
+          />
           <label htmlFor="chooseBanner">Upload an Image</label>
           <input
             type="file"
