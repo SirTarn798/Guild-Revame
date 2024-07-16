@@ -42,7 +42,7 @@ function Saved(props) {
       <div className="savedReviews">
         <h1>Your Saved Reviews.</h1>
         {data.map((review) => {
-          return <FullGameReview review={review} key={review.id} from="user" />;
+          return <FullGameReview review={review} key={review.reviewid} from="user" />;
         })}
       </div>
       <TopCurators />

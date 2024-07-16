@@ -179,7 +179,7 @@ function GameShowcase(props) {
           </div>
         </form>
         {reviews.map((review) => {
-          return <FullGameReview review={review} key={review.id} />;
+          return <FullGameReview review={review} key={review.reviewid} />;
         })}
       </div>
     </div>

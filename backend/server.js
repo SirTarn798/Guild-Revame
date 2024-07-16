@@ -144,6 +144,72 @@ app.get("/searchGameID/:gameID", async (req, res) => {
   }
 });
 
+app.post("/getTopGames", async (req, res) => {
+  const query = `
+    SELECT gameid, COUNT(*) as popularity
+    FROM reviews
+    GROUP BY gameid
+    ORDER BY popularity DESC;
+  `;
+  try {
+    const response = await db.query(query);
+    const data = response.rows;
+    res.json(data);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
+app.post("/getGames", async (req, res) => {
+  const gameids = req.body.gameids;
+  const getGamesBody = `fields id, name, rating_count, storyline, cover; where id = ${gameids} & category = 0;`;
+  let response;
+  let gameData;
+  try {
+    response = await fetch(url, {
+      method: "POST",
+      headers: headers,
+      body: getGamesBody,
+    });
+    gameData = await response.json();
+  } catch (err) {
+    console.log(err.message);
+  }
+  //create list of game ids
+  let gameIDs = "";
+  gameData?.forEach((game) => {
+    gameIDs += game.id + ",";
+  });
+  gameIDs = gameIDs.slice(0, -1);
+
+  //get covers
+  const getGamesCoverBody = `fields url; where game = (${gameIDs});`;
+  response = await fetch(coversUrl, {
+    method: "POST",
+    headers: headers,
+    body: getGamesCoverBody,
+  });
+  const gameCovers = await response.json();
+
+  //insert image urls to the gameData and change small to huge image
+  gameData = gameData?.map((game) => {
+    let matchingObj = gameCovers?.find(
+      (gameCover) => gameCover.id === game.cover
+    );
+    if (matchingObj) {
+      return {
+        ...game,
+        url: (matchingObj.url?.slice(0, -3) + "webp").replace(
+          "/t_thumb/",
+          "/t_cover_big/"
+        ),
+      };
+    }
+    return game;
+  });
+  res.json(gameData);
+});
+
 app.post("/getReviewFromGameID", async (req, res) => {
   if (req.body.requestFromGameID) {
     let data;
@@ -359,7 +425,7 @@ app.post("/getUser", async (req, res) => {
   } else if (req.body.requestFromUserID) {
     const userid = req.body.requestFromUserID;
     query = `select * from users where userid = '${userid}'`;
-  } 
+  }
   let user;
   try {
     const response = await db.query(query);

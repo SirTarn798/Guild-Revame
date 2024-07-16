@@ -36,7 +36,6 @@ function UserContent(props) {
         }),
       });
       let data = await response.text();
-      console.log(data);
       if (data === "success") {
         setHasFollowed(!hasFollowed);
       }
@@ -179,7 +178,7 @@ function UserContent(props) {
         <div className="usersReviews">
           {reviews.map((review) => {
             return (
-              <FullGameReview review={review} key={review.id} from="user" />
+              <FullGameReview review={review} key={review.reviewid} from="user" />
             );
           })}
         </div>

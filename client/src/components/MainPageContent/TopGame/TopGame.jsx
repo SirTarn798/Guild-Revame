@@ -1,10 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 import './TopGame.css'
 
-function TopGame() {
+function TopGame(props) {
+
+    const navigate = useNavigate();
+    const handleClickGame = () => {
+        navigate(`/game/${props.id}`)
+    }
     return(
-        <div className='topGame'>
-            <img src="/logo.png"/>
-            <p>Game Title</p>
+        <div className='topGame' onClick={handleClickGame}>
+            <img src={props.url}/>
+            <p>{props.name}</p>
         </div>
     )
 }

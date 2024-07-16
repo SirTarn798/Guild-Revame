@@ -24,7 +24,6 @@ function FollowingAccounts() {
         });
         const data = await response.json();
         setFollowingAccounts(data);
-        console.log(data);
       } catch (err) {
         console.log(err.message);
       }
@@ -38,7 +37,7 @@ function FollowingAccounts() {
       <div className="followingAccContent">
         <h2>Accounts you are following</h2>
         {followingAccounts.map((user) => {
-          return <UserElement pfp={user.pfp} username={user.username} userid={user.userid}/>;
+          return <UserElement pfp={user.pfp} username={user.username} userid={user.userid} key={user.userid}/>;
         })}
       </div>
       <TopCurators />
