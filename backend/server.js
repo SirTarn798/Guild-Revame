@@ -339,11 +339,11 @@ app.post("/handleSaveReview", async (req, res) => {
 app.post("/addUser", async (req, res) => {
   const data = req.body;
   const query = `
-  INSERT INTO users (userid, username, pfp, banner)
-  VALUES ($1, $2, $3, $4)
+  INSERT INTO users (userid, username, pfp, banner, followers)
+  VALUES ($1, $2, $3, $4, $5)
   `;
 
-  const user = [data.id, data.username, data.pfp, data.banner];
+  const user = [data.id, data.username, data.pfp, data.banner, data.followers];
   try {
     await db.query(query, user);
   } catch (err) {
@@ -359,7 +359,7 @@ app.post("/getUser", async (req, res) => {
   } else if (req.body.requestFromUserID) {
     const userid = req.body.requestFromUserID;
     query = `select * from users where userid = '${userid}'`;
-  }
+  } 
   let user;
   try {
     const response = await db.query(query);
@@ -395,8 +395,10 @@ app.post("/follow", async (req, res) => {
   const followingID = req.body.followingID;
   const follow = req.body.follow;
   const query = follow
-    ? `DELETE FROM "follow" WHERE followerID = '${followerID}' AND followingID = '${followingID}'`
-    : `INSERT INTO FOLLOW VALUES ('${followerID}', '${followingID}')`;
+    ? `DELETE FROM "follow" WHERE followerID = '${followerID}' AND followingID = '${followingID}';
+       UPDATE "users" SET "followers" = "followers" - 1 WHERE userid = '${followingID}';`
+    : `INSERT INTO FOLLOW VALUES ('${followerID}', '${followingID}');
+       UPDATE "users" SET "followers" = "followers" + 1 WHERE userid = '${followingID}';`;
   try {
     await db.query(query);
     res.send("success");

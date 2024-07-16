@@ -1,0 +1,37 @@
+.userElementContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 50px;
+
+    button {
+        height: 45px;
+        padding: 0 15px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: large;
+        font-weight: bold;
+      }
+
+}
+
+.userElementUserSection {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+
+    img {
+        width: 75px;
+        height: 75px;
+    }
+
+    h2 {
+        cursor: pointer;
+    }
+
+    h2:hover {
+        text-decoration: underline;
+    }
+}

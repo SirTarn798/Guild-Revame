@@ -131,7 +131,7 @@ function UserContent(props) {
           <img src={user[0]?.pfp} alt="profile picture" />
           <div className="userPageDetailText">
             <h3>{user[0]?.username}</h3>
-            <p>500 Followers 2 Following</p>
+            <p>{user[0]?.followers} Followers <a href="/followedAcccounts" style={{display : currentUser === user[0]?.userid ? "block" : "none"}}>78 Following</a></p>
           </div>
         </div>
         <button

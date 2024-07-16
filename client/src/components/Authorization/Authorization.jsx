@@ -60,7 +60,8 @@ function Authorization() {
         id: uid,
         username: username,
         pfp: "/user.png",
-        banner: "/nopic.png"
+        banner: "/nopic.png",
+        followers: 0,
       };
 
       res = await fetch(link, {

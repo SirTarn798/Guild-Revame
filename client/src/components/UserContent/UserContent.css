@@ -37,6 +37,19 @@
 .userPageDetailText {
   display: flex;
   flex-direction: column;
+  a {
+    color: rgb(211, 210, 210);
+    text-decoration: none;
+  }
+
+  p {
+    display: flex;
+    gap: 10px;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
 .imgAndTextUser {

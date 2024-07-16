@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/Main/MainPage";
 import Login from "./pages/Login/Login";
-import Following from "./pages/Follows/Following";
+import Following from "./pages/Following/Following";
 import SearchGame from "./pages/SearchGame/SearchGame";
 import useUserStore from "../lib/userStore";
 import { onAuthStateChanged } from "firebase/auth";
@@ -12,6 +12,7 @@ import User from "./pages/User/User";
 import EditUser from "./pages/EditUser/EditUser";
 import Saved from "./pages/Saved/Saved";
 import Review from "./pages/Review/Review";
+import FollowingAccounts from "./pages/FollowingAccounts/FollowingAccounts";
 
 function App() {
   const { currentUser, isLoading, fetchUserInfo } = useUserStore();
@@ -42,6 +43,7 @@ function App() {
         <Route path="/saved" element={<Saved />} />
         <Route path="/edituser" element={<EditUser />} />
         <Route path="/review/:reviewID" element={<Review />} />
+        <Route path="/followedAcccounts" element={<FollowingAccounts/>}/>
       </Routes>
     </BrowserRouter>
   );
