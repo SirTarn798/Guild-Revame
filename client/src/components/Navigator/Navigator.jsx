@@ -3,13 +3,12 @@ import useUserStore from "../../../lib/userStore";
 import { auth } from "../../../lib/firebase";
 
 function Navigator() {
-
-  const {currentUsername} = useUserStore();
+  const { currentUsername } = useUserStore();
 
   const handleLogout = (e) => {
     e.preventDefault();
     auth.signOut();
-  }
+  };
 
   return (
     <div className="navigatorContainer">

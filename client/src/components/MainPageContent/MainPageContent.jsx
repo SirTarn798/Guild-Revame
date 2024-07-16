@@ -3,12 +3,12 @@ import TopGame from "./TopGame/TopGame";
 import MiniReview from "../MiniReview/MiniReview";
 import SearchBar from "../SearchBar/SearchBar";
 import { useEffect, useState } from "react";
-import useUserStore from "../../../lib/userStore";
 
 function MainPageContent() {
-  const { currentUser, fetchUserInfo } = useUserStore();
   const [topGames, setTopGames] = useState();
   const [games, setGames] = useState([]);
+  const [topReviews, setTopReviews] = useState([]);
+  const [recentReviews, setRecentReviews] = useState([]);
 
   const getTopGames = async () => {
     const link = "http://localhost:3000/getTopGames";
@@ -26,9 +26,44 @@ function MainPageContent() {
     }
   };
 
+  const getTopReviews = async () => {
+    const link = "http://localhost:3000/getTopReviews";
+    try {
+      const response = await fetch(link, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+      setTopReviews(data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const getRecentReviews = async () => {
+    const link = "http://localhost:3000/getRecentReviews";
+    try {
+      const response = await fetch(link, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setRecentReviews(data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   useEffect(() => {
     getTopGames();
-  }, []); // Call getTopGames once on component mount
+    getTopReviews();
+    getRecentReviews();
+  }, []);
 
   useEffect(() => {
     const getGames = async () => {
@@ -48,7 +83,9 @@ function MainPageContent() {
 
         //add popularity to gameData
         const gameData = data.map((item1) => {
-          const item2 = topGames.find((item2) => item2.gameid === `${item1.id}`);
+          const item2 = topGames.find(
+            (item2) => item2.gameid === `${item1.id}`
+          );
           return {
             ...item1,
             ...(item2 || {}),
@@ -73,19 +110,25 @@ function MainPageContent() {
       <div className="showcaseReview">
         <h1>Top Reviews</h1>
         <div className="reviewRow">
-          <MiniReview />
-          <MiniReview />
+          {topReviews?.map((review) => {return(<MiniReview username={review.username} pfp={review.pfp} reviewtext={review.reviewtext} gamename={review.gamename} reviewid={review.reviewid} key={review.reviewid}/>)})}
         </div>
 
         <h1>Recent Reviews</h1>
         <div className="reviewRow">
-          <MiniReview />
-          <MiniReview />
+        {recentReviews?.map((review) => {return(<MiniReview username={review.username} pfp={review.pfp} reviewtext={review.reviewtext} gamename={review.gamename} reviewid={review.reviewid} key={review.reviewid}/>)})}
+
         </div>
         <h1>Top Game</h1>
         <div className="topGamesContainer">
           {games?.map((game) => {
-            return <TopGame name={game.name} url={game.url} id={game.id} key={game.id} />;
+            return (
+              <TopGame
+                name={game.name}
+                url={game.url}
+                id={game.id}
+                key={game.id}
+              />
+            );
           })}
         </div>
       </div>

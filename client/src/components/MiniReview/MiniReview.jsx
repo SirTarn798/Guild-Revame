@@ -1,17 +1,23 @@
+import { useNavigate } from "react-router-dom";
 import "./MiniReview.css";
 
-function MiniReview() {
+function MiniReview(props) {
+
+  const navigate = useNavigate();
+
+  const handleClickReview = () => {
+    navigate(`/review/${props.reviewid}`)
+  }
+
   return (
-    <div className="miniReview">
+    <div className="miniReview" onClick={handleClickReview}>
       <div className="userInfo">
-        <img src="/user.png" />
-        <p>Username</p>
+        <img src={props.pfp} />
+        <p>{props.username}</p>
       </div>
-      <p>Game title</p>
+      <p>{props.gamename}</p>
       <p>
-        This is a review OMEGALULThis is a review OMEGALULThis is a review
-        OMEGALULThis is a review OMEGALULThis is a review OMEGALULThis is a
-        review OMEGALULThis is a review OMEGALUL
+        {props.reviewtext}
       </p>
     </div>
   );

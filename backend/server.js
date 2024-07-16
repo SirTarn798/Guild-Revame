@@ -69,7 +69,7 @@ async function getImages(gameData, gameIDs) {
     }
     return game;
   });
-  return(gameData);
+  return gameData;
 }
 
 app.get("/searchGameName/:gameName", async (req, res) => {
@@ -117,7 +117,7 @@ app.get("/searchGameID/:gameID", async (req, res) => {
     });
     let gameData = await response.json();
 
-    gameData = await getImages(gameData, gameID)
+    gameData = await getImages(gameData, gameID);
 
     res.json(gameData);
   } catch (err) {
@@ -130,7 +130,8 @@ app.post("/getTopGames", async (req, res) => {
     SELECT gameid, COUNT(*) as popularity
     FROM reviews
     GROUP BY gameid
-    ORDER BY popularity DESC;
+    ORDER BY popularity DESC
+    LIMIT 5;
   `;
   try {
     const response = await db.query(query);
@@ -293,6 +294,69 @@ app.post("/getFollowReview", async (req, res) => {
   res.json(data);
 });
 
+app.post("/getReviewFromID", async (req, res) => {
+  const reviewID = req.body.reviewID;
+  const userid = req.body.userid;
+  const query = `
+    SELECT reviews.*, users.*,
+   EXISTS (
+            SELECT 1
+            FROM likes
+            WHERE likes.userid = '${userid}'
+            AND likes.reviewid = reviews.reviewid
+           ) AS hasLiked,
+          EXISTS (
+            SELECT 1 
+            FROM saved 
+            WHERE saved.userid = '${userid}'
+            AND saved.reviewid = reviews.reviewid
+           ) AS hasSaved 
+  FROM reviews
+  JOIN users ON users.userid = reviews.reviewerid
+  WHERE reviews.reviewid = '${reviewID}';
+  `;
+  let data;
+  try {
+    const response = await db.query(query);
+    data = response.rows;
+    res.json(data);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
+app.post("/getTopReviews", async (req, res) => {
+  const query = `
+    SELECT * FROM reviews
+    JOIN users ON users.userid = reviews.reviewerid
+    ORDER BY "like" DESC
+    LIMIT 2;
+  `;
+  try {
+    const response = await db.query(query);
+    const data = response.rows;
+    res.json(data);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
+app.post("/getRecentReviews", async (req, res) => {
+  const query = `
+    SELECT * FROM reviews
+    JOIN users ON users.userid = reviews.reviewerid
+    ORDER BY datetime DESC
+    LIMIT 2;
+  `;
+  try {
+    const response = await db.query(query);
+    const data = response.rows;
+    res.json(data);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
 app.post("/postReview", async (req, res) => {
   const data = req.body;
   const query = `
@@ -316,6 +380,18 @@ app.post("/postReview", async (req, res) => {
     console.log(err.message);
   }
 });
+
+app.post("/deleteReview", async (req,res) => {
+  const reviewid = req.body.reviewid;
+  const query = `
+  DELETE FROM reviews WHERE reviewid = '${reviewid}'
+  `;
+  try {
+    const response = await db.query(query);
+  } catch(err) {
+    console.log(err.message);
+  }
+})
 
 app.post("/handleLike", async (req, res) => {
   let query = "";
@@ -460,22 +536,6 @@ app.post("/checkFollow", async (req, res) => {
   res.json(data);
 });
 
-app.post("/getReviewFromID", async (req, res) => {
-  const reviewID = req.body.reviewID;
-  const query = `
-    SELECT * FROM reviews JOIN users ON users.userid = reviews.reviewerid
-    WHERE reviews.reviewid = '${reviewID}'
-  `;
-  let data;
-  try {
-    const response = await db.query(query);
-    data = response.rows;
-    res.json(data);
-  } catch (err) {
-    console.log(err.message);
-  }
-});
-
 app.post("/checkUsernameExistence", async (req, res) => {
   const username = req.body.username;
   const query = `
@@ -500,6 +560,21 @@ app.post("/changeUsername", async (req, res) => {
 
   try {
     const response = db.query(query);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
+app.post("/getTopCurators", async (req, res) => {
+  const query = `
+    SELECT * FROM users
+    ORDER BY followers DESC
+    LIMIT 10;
+  `;
+  try {
+    const response = await db.query(query);
+    const data = response.rows;
+    res.json(data);
   } catch (err) {
     console.log(err.message);
   }

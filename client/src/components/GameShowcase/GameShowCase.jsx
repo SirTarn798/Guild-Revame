@@ -175,7 +175,7 @@ function GameShowcase(props) {
               <img src="/notRecommend.png" />
               Not Recommend
             </div>
-            <button disabled={alreadyReview}>Post review</button>
+            <button disabled={alreadyReview || recommendation === "neutral" || reviewText === ""}>Post review</button>
           </div>
         </form>
         {reviews.map((review) => {

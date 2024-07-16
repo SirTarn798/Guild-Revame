@@ -4,8 +4,10 @@ import TopCurators from "../../components/TopCurators/TopCurators";
 import { useEffect, useState } from "react";
 import FullGameReview from "../../components/GameShowcase/FullGameReview/FullGameReview";
 import { useParams } from "react-router-dom";
+import useUserStore from "../../../lib/userStore";
 
 function Review() {
+  const {currentUser} = useUserStore();
   const [review, setReview] = useState([]);
   const params = useParams();
   const reviewID = params.reviewID;
@@ -19,7 +21,7 @@ function Review() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ reviewID: reviewID }),
+          body: JSON.stringify({ reviewID: reviewID, userid : currentUser }),
         });
         const data = await response.json();
         setReview(data[0]);

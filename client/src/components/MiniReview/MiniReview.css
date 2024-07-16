@@ -20,10 +20,14 @@
   img {
     width: 60px;
     height: 60px;
+    border-radius: 50%;
   }
 
   p {
     font-weight: bold;
   }
+}
 
+.miniReview:hover {
+  background-color: rgba(71, 71, 71, 0.692);
 }
