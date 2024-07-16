@@ -2,6 +2,8 @@
     display: flex;
     gap: 30px;
     align-items: center;
+    padding: 10px;
+    padding-left: 30px;
     img {
         width: 250px;
         height: 120px;
@@ -10,4 +12,8 @@
     p {
         color: rgb(211, 210, 210);
     }
+}
+
+.topGame:hover {
+    background-color: rgba(71, 71, 71, 0.692);
 }

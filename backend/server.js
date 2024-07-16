@@ -43,6 +43,35 @@ const headers = {
   "Content-Type": "application/json",
 };
 
+async function getImages(gameData, gameIDs) {
+  //get covers
+  const getGamesCoverBody = `fields url; where game = (${gameIDs});`;
+  const response = await fetch(coversUrl, {
+    method: "POST",
+    headers: headers,
+    body: getGamesCoverBody,
+  });
+  const gameCovers = await response.json();
+
+  //insert image urls to the gameData and change small to huge image
+  gameData = gameData.map((game) => {
+    let matchingObj = gameCovers.find(
+      (gameCover) => gameCover.id === game.cover
+    );
+    if (matchingObj) {
+      return {
+        ...game,
+        url: (matchingObj.url.slice(0, -3) + "webp").replace(
+          "/t_thumb/",
+          "/t_cover_big/"
+        ),
+      };
+    }
+    return game;
+  });
+  return(gameData);
+}
+
 app.get("/searchGameName/:gameName", async (req, res) => {
   const gameName = req.params.gameName;
   const getGamesBody = `fields id, name, rating_count, storyline, cover; where name ~ *"${gameName}"* & category = 0;`;
@@ -69,31 +98,7 @@ app.get("/searchGameName/:gameName", async (req, res) => {
     });
     gameIDs = gameIDs.slice(0, -1);
 
-    //get covers
-    const getGamesCoverBody = `fields url; where game = (${gameIDs});`;
-    response = await fetch(coversUrl, {
-      method: "POST",
-      headers: headers,
-      body: getGamesCoverBody,
-    });
-    const gameCovers = await response.json();
-
-    //insert image urls to the gameData and change small to huge image
-    gameData = gameData.map((game) => {
-      let matchingObj = gameCovers.find(
-        (gameCover) => gameCover.id === game.cover
-      );
-      if (matchingObj) {
-        return {
-          ...game,
-          url: (matchingObj.url.slice(0, -3) + "webp").replace(
-            "/t_thumb/",
-            "/t_cover_big/"
-          ),
-        };
-      }
-      return game;
-    });
+    gameData = await getImages(gameData, gameIDs);
     res.json(gameData);
   } catch (err) {
     console.log(err.message);
@@ -112,31 +117,7 @@ app.get("/searchGameID/:gameID", async (req, res) => {
     });
     let gameData = await response.json();
 
-    //get cover
-    const getGamesCoverBody = `fields url; where game = (${gameID});`;
-    response = await fetch(coversUrl, {
-      method: "POST",
-      headers: headers,
-      body: getGamesCoverBody,
-    });
-    const gameCovers = await response.json();
-
-    //insert image url to the gameData and change small to huge image
-    gameData = gameData.map((game) => {
-      let matchingObj = gameCovers.find(
-        (gameCover) => gameCover.id === game.cover
-      );
-      if (matchingObj) {
-        return {
-          ...game,
-          url: (matchingObj.url.slice(0, -3) + "webp").replace(
-            "/t_thumb/",
-            "/t_cover_big/"
-          ),
-        };
-      }
-      return game;
-    });
+    gameData = await getImages(gameData, gameID)
 
     res.json(gameData);
   } catch (err) {
@@ -182,31 +163,7 @@ app.post("/getGames", async (req, res) => {
   });
   gameIDs = gameIDs.slice(0, -1);
 
-  //get covers
-  const getGamesCoverBody = `fields url; where game = (${gameIDs});`;
-  response = await fetch(coversUrl, {
-    method: "POST",
-    headers: headers,
-    body: getGamesCoverBody,
-  });
-  const gameCovers = await response.json();
-
-  //insert image urls to the gameData and change small to huge image
-  gameData = gameData?.map((game) => {
-    let matchingObj = gameCovers?.find(
-      (gameCover) => gameCover.id === game.cover
-    );
-    if (matchingObj) {
-      return {
-        ...game,
-        url: (matchingObj.url?.slice(0, -3) + "webp").replace(
-          "/t_thumb/",
-          "/t_cover_big/"
-        ),
-      };
-    }
-    return game;
-  });
+  gameData = await getImages(gameData, gameIDs);
   res.json(gameData);
 });
 
